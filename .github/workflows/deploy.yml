@@ -39,8 +39,6 @@ jobs:
           OFFLINE: ''
       - name: Get dependencies
         run: npm ci
-      - name: NPM Install
-        run: npm install
       - name: Build
         run: npm run build
       - name: Deploy
