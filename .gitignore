@@ -1,5 +1,5 @@
 .DS_Store
-make-chase-ui/node_modules
+node_modules
 /dist
 
 
