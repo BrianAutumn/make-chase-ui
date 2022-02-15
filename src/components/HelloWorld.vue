@@ -89,15 +89,21 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <GoogleLogin/>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import logo from '../assets/logo.svg'
+import GoogleLogin from "@/components/GoogleLogin";
 
 export default {
   name: 'HelloWorld',
-
+  components: {GoogleLogin},
   data: () => ({
     ecosystem: [
       {
