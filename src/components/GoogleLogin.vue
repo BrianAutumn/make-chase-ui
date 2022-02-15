@@ -3,12 +3,14 @@
 </template>
 
 <script>
+import {appConf} from "@/conf";
+
 export default {
   name: "GoogleLogin",
   mounted() {
     // eslint-disable-next-line
     google.accounts.id.initialize({
-      client_id: "92116833711-06i78gunp707ht8vla0cdnsft3f1n5ks.apps.googleusercontent.com",
+      client_id: appConf.google.clientId,
       callback: this.login
     });
     // eslint-disable-next-line
