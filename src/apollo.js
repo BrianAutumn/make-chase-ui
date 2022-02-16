@@ -1,7 +1,7 @@
-import {ApolloClient, HttpLink, InMemoryCache, split} from "@apollo/client";
+import {ApolloClient, HttpLink, InMemoryCache, split} from "@apollo/client/core";
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
-import {appConf} from "@/conf";
+import {appConf} from "@/appConf";
 import {createApolloProvider} from "@vue/apollo-option";
 
 const httpLink = new HttpLink({
@@ -31,7 +31,7 @@ const link = split(
 )
 
 // Create the apollo client
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link,
   cache: new InMemoryCache(),
   connectToDevTools: true,

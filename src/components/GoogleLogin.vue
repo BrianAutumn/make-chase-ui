@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {appConf} from "@/conf";
+import {appConf} from "@/appConf";
 
 export default {
   name: "GoogleLogin",
