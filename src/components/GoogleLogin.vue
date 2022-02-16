@@ -22,6 +22,7 @@ export default {
   methods:{
     login(jwt){
       console.log('JWT',jwt)
+      this.$store.dispatch('login',jwt)
     }
   }
 }
