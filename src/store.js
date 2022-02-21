@@ -9,6 +9,16 @@ const LOGIN = gql`
         }
     }
 `
+const SEND_MESSAGE = gql`
+    mutation Mutation($text: String!) {
+        sendMessage(text: $text) {
+            messageId
+            text
+            timestamp
+            type
+        }
+    }
+`
 
 export const store = createStore({
   state() {
@@ -24,6 +34,14 @@ export const store = createStore({
           jwt:JSON.stringify(jwt)
         }
       })).data.success;
+    },
+    async sendMessage(){
+      await apolloClient.mutate({
+        mutation:SEND_MESSAGE,
+        variables:{
+          text:'This is a test message'
+        }
+      })
     }
   }
 })

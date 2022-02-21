@@ -94,12 +94,16 @@
         <GoogleLogin/>
       </v-col>
     </v-row>
+    <v-row>
+      <v-btn @click="sendMessage">Send Message</v-btn>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import logo from '../assets/logo.svg'
 import GoogleLogin from "@/components/GoogleLogin";
+import {mapActions} from "vuex";
 
 export default {
   name: 'HelloWorld',
@@ -153,5 +157,8 @@ export default {
       },
     ],
   }),
+  methods:{
+    ...mapActions(['sendMessage'])
+  }
 }
 </script>
