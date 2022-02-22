@@ -95,7 +95,19 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-btn @click="sendMessage">Send Message</v-btn>
+      <v-col>
+        <v-btn @click="sendMessage">Send Message</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div v-for="message of messages" :key="message.messageId">
+          <p>
+            {{message.text}} | {{new Date(Number.parseInt(message.timestamp))}}
+          </p>
+          <br/>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -103,11 +115,14 @@
 <script>
 import logo from '../assets/logo.svg'
 import GoogleLogin from "@/components/GoogleLogin";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: 'HelloWorld',
   components: {GoogleLogin},
+  mounted() {
+    this.$store.dispatch('loadMessages');
+  },
   data: () => ({
     ecosystem: [
       {
@@ -159,6 +174,9 @@ export default {
   }),
   methods:{
     ...mapActions(['sendMessage'])
+  },
+  computed:{
+    ...mapState(['messages'])
   }
 }
 </script>
