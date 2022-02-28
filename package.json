@@ -16,7 +16,7 @@
     "graphql-tag": "^2.12.6",
     "roboto-fontface": "*",
     "subscriptions-transport-ws": "^0.11.0",
-    "vue": "^3.2.31",
+    "vue": "3.2.30",
     "vue-router": "^4.0.12",
     "vuetify": "^3.0.0-alpha.0",
     "vuex": "^4.0.2",

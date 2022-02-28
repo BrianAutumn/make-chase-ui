@@ -103,7 +103,7 @@
       <v-col>
         <div v-for="message of messages" :key="message.messageId">
           <p>
-            {{message.text}} | {{new Date(Number.parseInt(message.timestamp))}}
+            {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
           </p>
           <br/>
         </div>
@@ -115,68 +115,80 @@
 <script>
 import logo from '../assets/logo.svg'
 import GoogleLogin from "@/components/GoogleLogin";
-import {mapActions, mapState} from "vuex";
+import {mapActions} from "vuex";
+import {QUERY_MESSAGES, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
+import {cloneDeep} from "@apollo/client/utilities";
 
 export default {
   name: 'HelloWorld',
   components: {GoogleLogin},
-  mounted() {
-    this.$store.dispatch('loadMessages');
+  data: () => {
+    return {
+      messages: [],
+      ecosystem: [
+        {
+          text: 'vuetify-loader',
+          href: 'https://github.com/vuetifyjs/vuetify-loader',
+        },
+        {
+          text: 'github',
+          href: 'https://github.com/vuetifyjs/vuetify',
+        },
+        {
+          text: 'awesome-vuetify',
+          href: 'https://github.com/vuetifyjs/awesome-vuetify',
+        },
+      ],
+      importantLinks: [
+        {
+          text: 'Chat',
+          href: 'https://community.vuetifyjs.com',
+        },
+        {
+          text: 'Made with Vuetify',
+          href: 'https://madewithvuejs.com/vuetify',
+        },
+        {
+          text: 'Twitter',
+          href: 'https://twitter.com/vuetifyjs',
+        },
+        {
+          text: 'Articles',
+          href: 'https://medium.com/vuetify',
+        },
+      ],
+      logo,
+      whatsNext: [
+        {
+          text: 'Explore components',
+          href: 'https://vuetifyjs.com',
+        },
+        {
+          text: 'Roadmap',
+          href: 'https://vuetifyjs.com/introduction/roadmap/',
+        },
+        {
+          text: 'Frequently Asked Questions',
+          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
+        },
+      ],
+    }
   },
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    logo,
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Roadmap',
-        href: 'https://vuetifyjs.com/introduction/roadmap/',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
-    ],
-  }),
-  methods:{
+  apollo: {
+    messages: {
+      query: QUERY_MESSAGES,
+      subscribeToMore: {
+        document: SUBSCRIPTION_MESSAGE_FEED,
+        updateQuery: (previousResult, {subscriptionData}) => {
+          let newResult = cloneDeep(previousResult);
+          newResult.messages.push(subscriptionData.data.messageFeed);
+          return newResult;
+        },
+      }
+    }
+  },
+  methods: {
     ...mapActions(['sendMessage'])
-  },
-  computed:{
-    ...mapState(['messages'])
   }
 }
 </script>
