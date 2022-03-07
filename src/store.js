@@ -3,16 +3,6 @@ import {apolloClient, subscriptionClient} from "@/apollo";
 import {MUTATION_LOGIN, MUTATION_SEND_MESSAGE, QUERY_ME} from "@/graphql/queries";
 
 export const store = createStore({
-  state() {
-    return {
-      authToken: null
-    }
-  },
-  mutations: {
-    setAuthToken(state, token) {
-      state.authToken = token;
-    }
-  },
   actions: {
     async login({dispatch}, jwt) {
       let result = (await apolloClient.mutate({
@@ -24,13 +14,7 @@ export const store = createStore({
       if (!result) {
         return result
       }
-      await dispatch('fetchAuthToken');
       subscriptionClient.close(false,false);
-    },
-    async fetchAuthToken({commit}){
-      commit('setAuthToken', (await apolloClient.query({
-        query: QUERY_ME
-      })).data.me)
     },
     async sendMessage() {
       await apolloClient.mutate({
