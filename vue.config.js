@@ -9,7 +9,15 @@ module.exports = {
         target: 'http://localhost:3001',
         ws:true,
         pathRewrite: {'^/serverlessws' : ''},
-        changeOrigin: true
+        changeOrigin: true,
+        onProxyReqWs(proxyReq, req, res){
+          if(req?.headers?.cookie){
+            req.headers.cookie = undefined;
+          }
+          if(proxyReq?.headers?.cookie){
+            proxyReq.headers.cookie = undefined;
+          }
+        }
       }
     }
   },

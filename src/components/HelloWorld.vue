@@ -117,7 +117,6 @@ import logo from '../assets/logo.svg'
 import GoogleLogin from "@/components/GoogleLogin";
 import {mapActions} from "vuex";
 import {QUERY_MESSAGES, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
-import {cloneDeep} from "@apollo/client/utilities";
 
 export default {
   name: 'HelloWorld',
@@ -180,9 +179,11 @@ export default {
       subscribeToMore: {
         document: SUBSCRIPTION_MESSAGE_FEED,
         updateQuery: (previousResult, {subscriptionData}) => {
-          let newResult = cloneDeep(previousResult);
-          newResult.messages.push(subscriptionData.data.messageFeed);
-          return newResult;
+          const newResult = {
+            messages: [...previousResult.messages],
+          }
+          newResult.messages.push(subscriptionData.data.messageFeed)
+          return newResult
         },
       }
     }

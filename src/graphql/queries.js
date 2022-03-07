@@ -39,3 +39,9 @@ export const QUERY_MESSAGES = gql`
         }
     }
 `
+
+export const QUERY_ME = gql`
+    query Messages {
+        me
+    }
+`
