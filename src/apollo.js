@@ -1,9 +1,12 @@
-import {ApolloClient, HttpLink, InMemoryCache, split} from "@apollo/client/core";
+import {ApolloClient, from, HttpLink, InMemoryCache, split} from "@apollo/client/core";
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import {appConf} from "@/appConf";
 import {createApolloProvider} from "@vue/apollo-option";
 import {QUERY_ME} from "@/graphql/queries";
+import {onError} from "apollo-link-error";
+import {router} from "@/router";
+import {store} from "@/store";
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
@@ -17,8 +20,8 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     async connectionParams() {
       return {
-        authToken:(await apolloClient.query({
-          query:QUERY_ME
+        authToken: (await apolloClient.query({
+          query: QUERY_ME
         })).data.me
       }
     }
@@ -27,22 +30,34 @@ const wsLink = new WebSocketLink({
 
 export const subscriptionClient = wsLink.subscriptionClient;
 
+const errorLink = onError(({response}) => {
+  if (response.errors)
+    response.errors = response.errors.filter(({extensions}) => {
+      if(extensions?.code === 'UNAUTHENTICATED'){
+        store.commit('loginDestination',{path:window.location.pathname})
+        router.push({name:'LoginPage'});
+        return false;
+      }
+      return true;
+    })
+})
+
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
-const link = split(
+const splitLink = split(
   // split based on operation type
   ({query}) => {
     const {kind, operation} = getMainDefinition(query)
     return kind === 'OperationDefinition' &&
       operation === 'subscription'
   },
-  wsLink,
-  httpLink
+  from([errorLink, wsLink]),
+  from([errorLink, httpLink])
 )
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({
-  link,
+  link: splitLink,
   cache: new InMemoryCache(),
   connectToDevTools: true,
 })

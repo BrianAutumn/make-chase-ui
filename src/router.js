@@ -27,10 +27,7 @@ export const router = createRouter({
     {
       path: '/games',
       name:'GameBrowser',
-      component: GameBrowser,
-      meta:{
-        auth:true
-      }
+      component: GameBrowser
     },
     {
       path: '/demo',
