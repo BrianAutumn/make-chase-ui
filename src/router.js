@@ -1,11 +1,56 @@
-// previously was
-// import Router from 'vue-router'
 import {createRouter, createWebHistory} from 'vue-router'
-import HelloWorld from "@/components/HelloWorld";
+import LoginPage from "@/views/LoginPage";
+import GameBrowser from "@/views/GameBrowser";
+import HomePage from "@/views/HomePage";
+import {store} from "@/store";
+import DemoPage from "@/views/DemoPage";
+import AboutPage from "@/views/AboutPage";
 
 export const router = createRouter({
   history: createWebHistory(),
-  routes:[
-    {path:'/',component:HelloWorld}
+  routes: [
+    {
+      path: '/',
+      name:'Home',
+      component: HomePage
+    },
+    {
+      path:'/defaultAuth',
+      name:'DefaultPageAuth',
+      redirect:{name:'GameBrowser'}
+    },
+    {
+      path: '/login',
+      name:'LoginPage',
+      component: LoginPage
+    },
+    {
+      path: '/games',
+      name:'GameBrowser',
+      component: GameBrowser,
+      meta:{
+        auth:true
+      }
+    },
+    {
+      path: '/demo',
+      name:'DemoPage',
+      component: DemoPage,
+      meta:{
+        auth:true
+      }
+    },
+    {
+      path: '/about',
+      name:'AboutPage',
+      component: AboutPage
+    }
   ]
+})
+
+router.beforeEach(async(to) => {
+  if(to.meta.auth && !await store.dispatch('isLoggedIn')){
+    store.commit('loginDestination',{path:to.path});
+    return {name:'LoginPage'};
+  }
 })

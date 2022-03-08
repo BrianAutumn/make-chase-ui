@@ -20,9 +20,10 @@ export default {
     );
   },
   methods:{
-    login(jwt){
+    async login(jwt){
       document.cookie = "g_state=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      this.$store.dispatch('login',jwt)
+      let result = await this.$store.dispatch('login',jwt)
+      this.$emit('login',result);
     }
   }
 }

@@ -3,7 +3,6 @@ import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import {appConf} from "@/appConf";
 import {createApolloProvider} from "@vue/apollo-option";
-import {store} from "@/store";
 import {QUERY_ME} from "@/graphql/queries";
 
 const httpLink = new HttpLink({
@@ -17,15 +16,10 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     async connectionParams() {
-      if(!store.state.authToken){
-        await store.dispatch('fetchAuthToken');
-      }
       return {
         authToken:(await apolloClient.query({
-          query:QUERY_ME,
-          fetchPolicy:'network-only'
-        })).data.me,
-        time:Date.now()
+          query:QUERY_ME
+        })).data.me
       }
     }
   },
