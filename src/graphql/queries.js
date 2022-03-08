@@ -10,10 +10,13 @@ export const MUTATION_LOGIN = gql`
 export const MUTATION_SEND_MESSAGE = gql`
     mutation SendMessage($text: String!) {
         sendMessage(text: $text) {
-            messageId
+            _id
             text
             timestamp
-            type
+            type,
+            user {
+                displayName
+            }
         }
     }
 `
@@ -21,10 +24,13 @@ export const MUTATION_SEND_MESSAGE = gql`
 export const SUBSCRIPTION_MESSAGE_FEED = gql`
     subscription MessageFeed {
         messageFeed {
-            messageId
+            _id
             text
             timestamp
             type
+            user {
+                displayName
+            }
         }
     }
 `
@@ -32,10 +38,13 @@ export const SUBSCRIPTION_MESSAGE_FEED = gql`
 export const QUERY_MESSAGES = gql`
     query Messages {
         messages {
-            messageId
+            _id
             text
             timestamp
             type
+            user {
+                displayName
+            }
         }
     }
 `
@@ -43,5 +52,13 @@ export const QUERY_MESSAGES = gql`
 export const QUERY_ME = gql`
     query Messages {
         me
+    }
+`
+
+export const QUERY_USER = gql`
+    query User {
+        user {
+            displayName
+        }
     }
 `

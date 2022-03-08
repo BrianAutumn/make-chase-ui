@@ -2,6 +2,11 @@
   <v-container>
     <v-row>
       <v-col>
+        Hello {{user?.displayName}}
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <v-btn @click="sendMessage">Send Message</v-btn>
       </v-col>
     </v-row>
@@ -9,7 +14,7 @@
       <v-col>
         <div v-for="message of messages" :key="message.messageId">
           <p>
-            {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
+            {{message.user.displayName}} | {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
           </p>
           <br/>
         </div>
@@ -19,7 +24,7 @@
 </template>
 
 <script>
-import {QUERY_MESSAGES, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
+import {QUERY_MESSAGES, QUERY_USER, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
 import {mapActions} from "vuex";
 
 export default {
@@ -37,6 +42,9 @@ export default {
           return newResult
         },
       }
+    },
+    user:{
+      query:QUERY_USER
     }
   },
   methods: {
