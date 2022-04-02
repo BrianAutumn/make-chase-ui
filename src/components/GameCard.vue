@@ -1,10 +1,13 @@
 <template>
-  <v-card :class="{'lobby-game':game.state === 'LOBBY','closed-game':game.state === 'CLOSED'}">
+  <v-card :class="{'lobby-game':game.state === 'LOBBY','closed-game':game.state === 'CLOSED','active-game':game.state === 'ACTIVE'}">
     <v-card-title>
-      <v-btn class="mr-2" @click="closeGame(game._id)" v-show="inGame && game.state !== 'CLOSED'">
+      <v-btn class="mr-2" @click="viewGame" v-show="game.state === 'ACTIVE'">
+        View
+      </v-btn>
+      <v-btn class="mr-2" @click="closeGame(game._id)" v-show="inGame && (game.state === 'LOBBY' || game.state === 'ACTIVE')">
         Close
       </v-btn>
-      <v-btn class="mr-2" @click="joinGame(game._id)" v-show="!inGame && game.state !== 'CLOSED'">
+      <v-btn class="mr-2" @click="joinGame(game._id)" v-show="!inGame && game.state === 'LOBBY' && game.users.length === 1">
         Join
       </v-btn>
       <span>{{game.name}}</span>
@@ -33,7 +36,15 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['closeGame', 'joinGame'])
+    ...mapActions(['closeGame', 'joinGame']),
+    viewGame(){
+      this.$router.push({
+        name:'GameBoard',
+        params:{
+          gameId:this.game._id
+        }
+      })
+    }
   },
   computed:{
     inGame(){
@@ -52,5 +63,9 @@ export default {
 
 .closed-game {
   background-color:#fce1e4
+}
+
+.active-game {
+  background-color:#e8dff5
 }
 </style>
