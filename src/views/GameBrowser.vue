@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <GameCard class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
+        <GameCard :show-close="!!game.users.find(user => user._id === me._id)" class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
       </v-col>
     </v-row>
   </v-container>
@@ -15,8 +15,7 @@
 
 <script>
 import {
-  QUERY_GAMES,
-  QUERY_USER,
+  QUERY_GAMES, QUERY_ME,
   SUBSCRIPTION_GAMES_FEED,
 } from "@/graphql/queries";
 import {mapActions} from "vuex";
@@ -27,6 +26,9 @@ export default {
   name: "GameBrowser",
   components: {CreateGameDialog, GameCard},
   apollo: {
+    me:{
+      query: QUERY_ME
+    },
     games: {
       query: QUERY_GAMES,
       subscribeToMore: {
@@ -50,9 +52,6 @@ export default {
           return newResult
         },
       }
-    },
-    user:{
-      query:QUERY_USER
     }
   },
   methods: {

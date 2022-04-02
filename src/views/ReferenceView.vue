@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        Hello {{user?.displayName}}
+        Hello {{me?.displayName}}
       </v-col>
     </v-row>
     <v-row>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {QUERY_MESSAGES, QUERY_USER, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
+import {QUERY_ME, QUERY_MESSAGES, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
 import {mapActions} from "vuex";
 
 export default {
@@ -43,8 +43,8 @@ export default {
         },
       }
     },
-    user:{
-      query:QUERY_USER
+    me:{
+      query:QUERY_ME
     }
   },
   methods: {

@@ -1,6 +1,12 @@
 import {createStore} from 'vuex'
 import {apolloClient, subscriptionClient} from "@/apollo";
-import {MUTATION_CREATE_GAME, MUTATION_LOGIN, MUTATION_SEND_MESSAGE, QUERY_ME} from "@/graphql/queries";
+import {
+  MUTATION_CLOSE_GAME,
+  MUTATION_CREATE_GAME,
+  MUTATION_LOGIN,
+  MUTATION_SEND_MESSAGE,
+  QUERY_ME
+} from "@/graphql/queries";
 
 export const store = createStore({
   state:{
@@ -48,6 +54,14 @@ export const store = createStore({
       return (await apolloClient.query({
         query: QUERY_ME
       })).data.me !== 'undefined';
+    },
+    async closeGame(context, gameId){
+      return (await apolloClient.mutate({
+        mutation: MUTATION_CLOSE_GAME,
+        variables: {
+          gameId
+        }
+      })).data.closeGame
     }
   }
 })
