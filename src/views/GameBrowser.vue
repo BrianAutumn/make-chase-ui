@@ -2,43 +2,51 @@
   <v-container>
     <v-row>
       <v-col>
-        Hello {{user?.displayName}}
+        <CreateGameDialog/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-btn @click="sendMessage">Send Message</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div v-for="message of messages" :key="message.messageId">
-          <p>
-            {{message.user.displayName}} | {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
-          </p>
-          <br/>
-        </div>
+        <GameCard class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import {QUERY_MESSAGES, QUERY_USER, SUBSCRIPTION_MESSAGE_FEED} from "@/graphql/queries";
+import {
+  QUERY_GAMES,
+  QUERY_USER,
+  SUBSCRIPTION_GAMES_FEED,
+} from "@/graphql/queries";
 import {mapActions} from "vuex";
+import GameCard from "@/components/GameCard";
+import CreateGameDialog from "@/components/CreateGameDialog";
 
 export default {
   name: "GameBrowser",
+  components: {CreateGameDialog, GameCard},
   apollo: {
-    messages: {
-      query: QUERY_MESSAGES,
+    games: {
+      query: QUERY_GAMES,
       subscribeToMore: {
-        document: SUBSCRIPTION_MESSAGE_FEED,
+        document: SUBSCRIPTION_GAMES_FEED,
         updateQuery: (previousResult, {subscriptionData}) => {
           const newResult = {
-            messages: [...previousResult.messages],
+            games: [...previousResult.games],
           }
-          newResult.messages.push(subscriptionData.data.messageFeed)
+          let gameUpdate = subscriptionData.data.gameFeed
+          let replace = false;
+          for(let i in newResult.games){
+            if(newResult.games[i]._id === gameUpdate._id){
+              replace = true;
+              newResult.games[i] = gameUpdate;
+              break;
+            }
+          }
+          if(!replace){
+            newResult.games.push(gameUpdate);
+          }
           return newResult
         },
       }

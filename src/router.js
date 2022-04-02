@@ -5,6 +5,7 @@ import HomePage from "@/views/HomePage";
 import {store} from "@/store";
 import DemoPage from "@/views/DemoPage";
 import AboutPage from "@/views/AboutPage";
+import ReferenceView from "@/views/ReferenceView";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -44,6 +45,11 @@ export const router = createRouter({
       path: '/about',
       name:'AboutPage',
       component: AboutPage
+    },
+    {
+      path: '/reference',
+      name:'ReferencePage',
+      component: ReferenceView
     }
   ]
 })
