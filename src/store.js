@@ -2,7 +2,7 @@ import {createStore} from 'vuex'
 import {apolloClient, subscriptionClient} from "@/apollo";
 import {
   MUTATION_CLOSE_GAME,
-  MUTATION_CREATE_GAME,
+  MUTATION_CREATE_GAME, MUTATION_JOIN_GAME,
   MUTATION_LOGIN,
   MUTATION_SEND_MESSAGE,
   QUERY_ME
@@ -62,6 +62,14 @@ export const store = createStore({
           gameId
         }
       })).data.closeGame
+    },
+    async joinGame(context, gameId){
+      return (await apolloClient.mutate({
+        mutation: MUTATION_JOIN_GAME,
+        variables: {
+          gameId
+        }
+      })).data.joinGame
     }
   }
 })

@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <GameCard :show-close="!!game.users.find(user => user._id === me._id)" class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
+        <GameCard class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
       </v-col>
     </v-row>
   </v-container>

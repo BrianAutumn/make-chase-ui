@@ -62,6 +62,19 @@ export const MUTATION_CLOSE_GAME = gql`
     }
 `
 
+export const MUTATION_JOIN_GAME = gql`
+    mutation CloseGame($gameId: String!) {
+        joinGame(gameId: $gameId) {
+            _id
+            name
+            users {
+                displayName
+            }
+            state
+        }
+    }
+`
+
 
 export const MUTATION_SEND_MESSAGE = gql`
     mutation SendMessage($text: String!) {
