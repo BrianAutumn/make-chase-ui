@@ -5,9 +5,9 @@
         Create Game
       </v-btn>
     </template>
-    <v-card>
+    <v-card class="card pa-3">
       <v-card-title>Create Game</v-card-title>
-      <v-card-text>
+      <v-card-text class="text-field">
         <v-text-field label="name" v-model="name"/>
       </v-card-text>
       <v-card-actions>
@@ -21,6 +21,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {QUERY_ME} from "@/graphql/queries";
 
 export default {
   name: "CreateGameDialog",
@@ -28,6 +29,11 @@ export default {
     return {
       dialog:false,
       name:''
+    }
+  },
+  apollo:{
+    me:{
+      query:QUERY_ME
     }
   },
   methods:{
@@ -40,11 +46,24 @@ export default {
       console.log('name',this.name);
       this.createGame({name:this.name});
       this.dialog = false;
+      this.reset()
+    },
+    reset(){
+      this.name = `${this.me.displayName}'s Game`
     }
+  },
+  mounted(){
+    this.reset();
   }
 }
 </script>
 
 <style scoped>
+.text-field{
+  min-width:600px
+}
 
+.card {
+  min-width: fit-content;
+}
 </style>
