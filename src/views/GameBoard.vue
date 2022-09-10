@@ -37,10 +37,11 @@ export default {
       board:{
         pieces:{
           runner:{
-            location:'B'
+            location:'B',
+            $view:'runner'
           },
           chaser:{
-            location:'C'
+            location:'F'
           }
         },
         nodes:{
@@ -63,6 +64,10 @@ export default {
           E:{
             x:45,
             y:5
+          },
+          F:{
+            x:80,
+            y:5
           }
         },
         connections:[
@@ -71,7 +76,8 @@ export default {
           ['C','A'],
           ['D','C'],
           ['A','E'],
-          ['E','D']
+          ['E','D'],
+          ['E','F']
         ]
       }
     }
