@@ -1,5 +1,5 @@
 <template>
-  <slot name="icon" :x="nodes[location].x - width/2" :y="nodes[location].y - height" :width="width" :height="height"/>
+  <slot name="icon" :x="node.x - width/2" :y="node.y - height" :width="width" :height="height"/>
 </template>
 
 <script>
@@ -19,6 +19,11 @@ export default {
     location:{
       type:String,
       required:true
+    }
+  },
+  computed:{
+    node(){
+      return this.nodes.find(node => node.label === this.location)
     }
   }
 }

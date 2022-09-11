@@ -9,11 +9,11 @@ import {
 } from "@/graphql/queries";
 
 export const store = createStore({
-  state:{
-    loginDestination:null
+  state: {
+    loginDestination: null
   },
-  mutations:{
-    loginDestination(state, destination){
+  mutations: {
+    loginDestination(state, destination) {
       state.loginDestination = destination;
     }
   },
@@ -27,10 +27,10 @@ export const store = createStore({
       })).data.login.success;
       if (result) {
         await apolloClient.query({
-          query:QUERY_ME,
-          fetchPolicy:'network-only'
+          query: QUERY_ME,
+          fetchPolicy: 'network-only'
         });
-        subscriptionClient.close(false,false);
+        subscriptionClient.close(false, false);
       }
       return result;
     },
@@ -42,7 +42,7 @@ export const store = createStore({
         }
       })
     },
-    async createGame(context, {name}){
+    async createGame(context, {name}) {
       return (await apolloClient.mutate({
         mutation: MUTATION_CREATE_GAME,
         variables: {
@@ -50,12 +50,21 @@ export const store = createStore({
         }
       })).data.createGame
     },
-    async isLoggedIn(){
+    async makeMove(context, {gameId, actions}) {
+      return (await apolloClient.mutate({
+        mutation: MUTATION_CREATE_GAME,
+        variables: {
+          gameId,
+          actions
+        }
+      }))
+    },
+    async isLoggedIn() {
       return (await apolloClient.query({
         query: QUERY_ME
       })).data.me !== 'undefined';
     },
-    async closeGame(context, gameId){
+    async closeGame(context, gameId) {
       return (await apolloClient.mutate({
         mutation: MUTATION_CLOSE_GAME,
         variables: {
@@ -63,7 +72,7 @@ export const store = createStore({
         }
       })).data.closeGame
     },
-    async joinGame(context, gameId){
+    async joinGame(context, gameId) {
       return (await apolloClient.mutate({
         mutation: MUTATION_JOIN_GAME,
         variables: {
