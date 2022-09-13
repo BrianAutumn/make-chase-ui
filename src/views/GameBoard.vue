@@ -1,18 +1,16 @@
 <template>
   <div class="container">
-    <v-card class="move">
+    <v-card class="move" v-if="selectedNode !== ''">
       <v-card-text>
-        <v-text-field label="Space" v-model="moveTarget">
-        </v-text-field>
         <v-btn @click="submitMove">
-          Submit
+          Move Here
         </v-btn>
       </v-card-text>
     </v-card>
     <svg v-if="board" ref="board" class="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white" />
       <BoardConnection v-for="(connection, i) of board.connections" :key="i" :connection="connection" :nodes="board.nodes" />
-      <BoardNode v-for="node of board.nodes" :key="node.label" :node="node"/>
+      <BoardNode v-for="node of board.nodes" :key="node.label" :node="node" @click="selectNode(node.label)" :selected="node.label === selectedNode"/>
       <BoardPiece v-for="piece of board.pieces" :key="piece.label" :piece="piece" :nodes="board.nodes" />
     </svg>
   </div>
@@ -36,7 +34,14 @@ export default {
   methods:{
     ...mapActions(['makeActions']),
     submitMove(){
-      this.makeActions({gameId:this.gameId,actions:[{code: 'MOVE', args:this.moveTarget}]})
+      this.makeActions({gameId:this.gameId,actions:[{code: 'MOVE', args:this.selectedNode}]})
+    },
+    selectNode(node){
+      if(this.selectedNode === node){
+        this.selectedNode = ''
+      }else{
+        this.selectedNode = node;
+      }
     }
   },
   computed:{
@@ -47,7 +52,8 @@ export default {
   data(){
     return {
       moveTarget:'',
-      panzoomInit:false
+      panzoomInit:false,
+      selectedNode:''
     }
   },
   apollo: {
