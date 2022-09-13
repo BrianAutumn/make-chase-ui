@@ -70,7 +70,7 @@ export const MUTATION_CLOSE_GAME = gql`
 `
 
 export const MUTATION_JOIN_GAME = gql`
-    mutation CloseGame($gameId: String!) {
+    mutation JoinGame($gameId: String!) {
         joinGame(gameId: $gameId) {
             _id
             name
