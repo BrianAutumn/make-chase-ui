@@ -41,4 +41,8 @@ export default {
 .connection-available {
   stroke: blue;
 }
+
+.connection-committed {
+  stroke: limegreen;
+}
 </style>

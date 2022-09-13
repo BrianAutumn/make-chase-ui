@@ -72,6 +72,10 @@ export default {
     fill:blue;
   }
 
+  .node-committed {
+    fill:limegreen;
+  }
+
   .text-label{
     font-size: 2px;
     text-anchor: middle;

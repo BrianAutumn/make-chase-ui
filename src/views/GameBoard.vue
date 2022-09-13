@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <GameStateIndicator v-if="board" :turn="board.turn"/>
-    <ActionCard v-if="selectedNode.label" :coords="selectedAnchor" @submit="submitAction"/>
+    <GameStateIndicator v-if="board" :board="board" :actionCommitted="actionCommitted"/>
+    <ActionCard v-if="selectedNode.label && !actionCommitted" :coords="selectedAnchor" @submit="submitAction"/>
     <svg v-if="board" ref="board" class="board-svg board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white" />
       <BoardConnection v-for="(connection, i) of amendedConnections" :key="i" :connection="connection" :nodes="board.nodes" />
@@ -49,6 +49,7 @@ export default {
       }
     },
     submitAction(){
+      this.actionCommitted = true;
       this.makeActions({gameId:this.gameId,actions:[{code: 'MOVE', args:this.selectedNode.label}]})
     }
   },
@@ -73,10 +74,14 @@ export default {
       let amendedNodes = cloneDeep(this.board.nodes);
       for(let node of amendedNodes){
         if(node.label === this.selectedNode.label){
-          node.state = 'SELECTED'
+          if(this.actionCommitted){
+            node.state = 'COMMITTED'
+          }else{
+            node.state = 'SELECTED'
+          }
           continue
         }
-        if(this.adjacentNodes.includes(node.label)){
+        if(!this.actionCommitted && this.adjacentNodes.includes(node.label)){
           node.state = 'AVAILABLE'
           continue
         }
@@ -88,10 +93,14 @@ export default {
       let amendedConnections = cloneDeep(this.board.connections);
       for(let connection of amendedConnections){
         if(connection.nodes.includes(this.selectedNode.label) && connection.nodes.includes(this.myLocation) && this.myLocation !== this.selectedNode.label){
-          connection.state = 'SELECTED'
+          if(this.actionCommitted){
+            connection.state = 'COMMITTED'
+          }else{
+            connection.state = 'SELECTED'
+          }
           continue;
         }
-        if(connection.nodes.includes(this.myLocation)){
+        if(!this.actionCommitted && connection.nodes.includes(this.myLocation)){
           connection.state = 'AVAILABLE'
           continue;
         }
@@ -105,7 +114,8 @@ export default {
       moveTarget:'',
       panzoomInit:false,
       selectedNode:{},
-      selectedAnchor:{}
+      selectedAnchor:{},
+      actionCommitted:false
     }
   },
   apollo: {
