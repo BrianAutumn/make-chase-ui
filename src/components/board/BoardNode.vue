@@ -1,12 +1,15 @@
 <template>
-  <g class="node">
+  <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}" @click="selected">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
-    <circle :cx="node.x" :cy="node.y" r="2" :class="{'node-unselected':node.state === 'NONE','node-selected':node.state === 'SELECTED','node-available':node.state === 'AVAILABLE'}"/>
-    <text :x="node.x" :y="node.y" :class="[{'label-unselected':node.state === 'NONE','label-selected':node.state === 'SELECTED','label-available':node.state === 'AVAILABLE'},'text-label']">{{node.label}}</text>
+    <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
+    <text :x="node.x" :y="node.y" :class="labelClass">{{node.label}}</text>
   </g>
 </template>
 
 <script>
+
+const SELECTABLE = ['AVAILABLE','SELECTED']
+
 export default {
   name: "BoardNode",
   props:{
@@ -14,16 +17,38 @@ export default {
       type:Object,
       required:true
     }
+  },
+  methods:{
+    selected(){
+      if(this.selectable){
+        this.$emit('selected',this.node)
+      }
+    }
+  },
+  computed:{
+    labelClass(){
+      return [`label-${this.node.state.toLowerCase()}`,'text-label']
+    },
+    nodeClass(){
+      return [`node-${this.node.state.toLowerCase()}`]
+    },
+    selectable(){
+      return SELECTABLE.includes(this.node.state)
+    }
   }
 }
 </script>
 
 <style scoped>
-  .node {
-    cursor:pointer;
+  .selectable-node {
+    cursor: pointer;
   }
 
-  .label-unselected {
+  .non-selectable-node {
+    cursor:default;
+  }
+
+  .label-none {
     fill:whitesmoke;
   }
 
@@ -35,7 +60,7 @@ export default {
     fill:whitesmoke;
   }
 
-  .node-unselected {
+  .node-none {
     fill:black;
   }
 

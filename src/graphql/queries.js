@@ -114,7 +114,9 @@ export const SUBSCRIPTION_MESSAGE_FEED = gql`
 export const SUBSCRIPTION_BOARD_UPDATES = gql`
     subscription BoardUpdates($gameId: String!) {
         boardUpdates(gameId: $gameId) {
-            connections
+            connections {
+                nodes
+            }
             nodes {
                 label
                 x
@@ -139,7 +141,9 @@ export const SUBSCRIPTION_BOARD_UPDATES = gql`
 export const QUERY_BOARD = gql`
     query Board($gameId: String!) {
         board(gameId: $gameId) {
-            connections
+            connections {
+                nodes
+            }
             nodes {
                 label
                 x
