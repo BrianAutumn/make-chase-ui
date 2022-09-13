@@ -3,7 +3,7 @@ import {apolloClient, subscriptionClient} from "@/apollo";
 import {
   MUTATION_CLOSE_GAME,
   MUTATION_CREATE_GAME, MUTATION_JOIN_GAME,
-  MUTATION_LOGIN,
+  MUTATION_LOGIN, MUTATION_MAKE_ACTIONS,
   MUTATION_SEND_MESSAGE,
   QUERY_ME
 } from "@/graphql/queries";
@@ -50,9 +50,9 @@ export const store = createStore({
         }
       })).data.createGame
     },
-    async makeMove(context, {gameId, actions}) {
+    async makeActions(context, {gameId, actions}) {
       return (await apolloClient.mutate({
-        mutation: MUTATION_CREATE_GAME,
+        mutation: MUTATION_MAKE_ACTIONS,
         variables: {
           gameId,
           actions

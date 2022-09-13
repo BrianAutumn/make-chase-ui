@@ -34,9 +34,9 @@ export default {
   name: "GameBoard",
   components: {BoardPiece, BoardConnection, BoardNode},
   methods:{
-    ...mapActions(['makeMove']),
+    ...mapActions(['makeActions']),
     submitMove(){
-      this.makeMove({gameId:this.gameId,actions:[{code: 'MOVE', args:this.moveTarget}]})
+      this.makeActions({gameId:this.gameId,actions:[{code: 'MOVE', args:this.moveTarget}]})
     }
   },
   computed:{

@@ -8,9 +8,9 @@ export const MUTATION_LOGIN = gql`
     }
 `
 
-export const MUTATION_MAKE_MOVE = gql`
-    mutation MakeMove($gameId: String!, $actions: [Action]) {
-        makeMove(gameId: $gameId, actions: $actions)
+export const MUTATION_MAKE_ACTIONS = gql`
+    mutation MakeActions($gameId: String!, $actions: [Action]) {
+        makeActions(gameId: $gameId, actions: $actions)
     }
 
 `
