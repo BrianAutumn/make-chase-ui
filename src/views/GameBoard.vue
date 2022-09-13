@@ -64,7 +64,7 @@ export default {
       subscribeToMore: {
         document: SUBSCRIPTION_BOARD_UPDATES,
         updateQuery: (previousResult, {subscriptionData}) => {
-          return subscriptionData.data.BoardUpdates.board
+          return {board:subscriptionData.data.boardUpdates}
         },
         variables() {
           return {
