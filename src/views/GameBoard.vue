@@ -12,33 +12,27 @@
     <svg ref="board" class="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white" />
       <BoardConnection v-for="(connection, i) of board.connections" :key="i" :connection="connection" :nodes="board.nodes" />
-      <BoardNode v-for="(node, label) of board.nodes" :key="label" :node="node"/>
-      <BoardPiece :location="board.pieces.chaser.location" :nodes="board.nodes">
-        <template v-slot:icon="slotProps">
-          <ChaserIcon v-bind="slotProps"/>
-        </template>
-      </BoardPiece>
-      <BoardPiece :location="board.pieces.runner.location" :nodes="board.nodes">
-        <template v-slot:icon="slotProps">
-          <RunnerIcon v-bind="slotProps"/>
-        </template>
-      </BoardPiece>
+      <BoardNode v-for="node of board.nodes" :key="node.label" :node="node"/>
+      <BoardPiece v-for="piece of board.pieces" :key="piece.label" :piece="piece" :nodes="board.nodes" />
     </svg>
   </div>
 </template>
 
 <script>
-import * as panzoom from "panzoom";
 import BoardNode from "@/components/board/BoardNode";
 import BoardConnection from "@/components/board/BoardConnection";
-import ChaserIcon from "@/components/icons/ChaserIcon";
-import RunnerIcon from "@/components/icons/RunnerIcon";
 import BoardPiece from "@/components/board/BoardPiece";
 import {mapActions} from "vuex";
+import {
+  QUERY_BOARD,
+  QUERY_ME,
+  SUBSCRIPTION_BOARD_UPDATES,
+} from "@/graphql/queries";
+import * as panzoom from "panzoom";
 
 export default {
   name: "GameBoard",
-  components: {BoardPiece, ChaserIcon, BoardConnection, BoardNode, RunnerIcon},
+  components: {BoardPiece, BoardConnection, BoardNode},
   mounted(){
     panzoom(this.$refs.board)
   },
@@ -56,60 +50,32 @@ export default {
   data(){
     return {
       moveTarget:'',
-      board:{
-        pieces:{
-          runner:{
-            location:'B',
-            $view:'runner'
-          },
-          chaser:{
-            location:'C'
+    }
+  },
+  apollo: {
+    me:{
+      query: QUERY_ME
+    },
+    board:{
+      query: QUERY_BOARD,
+      variables() {
+        return {
+          gameId: this.gameId,
+        }
+      },
+      subscribeToMore: {
+        document: SUBSCRIPTION_BOARD_UPDATES,
+        updateQuery: (previousResult, {subscriptionData}) => {
+          return subscriptionData.data.BoardUpdates.board
+        },
+        variables() {
+          return {
+            gameId: this.gameId,
           }
         },
-        nodes:[
-          {
-            label:'A',
-            x:10,
-            y:20,
-          },
-          {
-            label:'B',
-            x:30,
-            y:70,
-          },
-          {
-            label:'C',
-            x:70,
-            y:90
-          },
-          {
-            label:'D',
-            x:80,
-            y:30
-          },
-          {
-            label:'E',
-            x:45,
-            y:5
-          },
-          {
-            label:'F',
-            x:80,
-            y:5
-          }
-        ],
-        connections:[
-          ['A','B'],
-          ['B','C'],
-          ['C','A'],
-          ['D','C'],
-          ['A','E'],
-          ['E','D'],
-          ['E','F']
-        ]
       }
     }
-  }
+  },
 }
 </script>
 

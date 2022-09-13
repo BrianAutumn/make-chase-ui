@@ -111,6 +111,56 @@ export const SUBSCRIPTION_MESSAGE_FEED = gql`
     }
 `
 
+export const SUBSCRIPTION_BOARD_UPDATES = gql`
+    subscription BoardUpdates($gameId: String!) {
+        boardUpdates(gameId: $gameId) {
+            connections
+            nodes {
+                label
+                x
+                y
+            }
+            pieces {
+                label
+                location
+            }
+            roles {
+                role
+                user {
+                    _id
+                    displayName
+                }
+            }
+            turn
+        }
+    }
+`
+
+export const QUERY_BOARD = gql`
+    query Board($gameId: String!) {
+        board(gameId: $gameId) {
+            connections
+            nodes {
+                label
+                x
+                y
+            }
+            pieces {
+                label
+                location
+            }
+            roles {
+                role
+                user {
+                    _id
+                    displayName
+                }
+            }
+            turn
+        }
+    }
+`
+
 export const QUERY_MESSAGES = gql`
     query Messages {
         messages {
