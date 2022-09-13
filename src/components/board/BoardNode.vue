@@ -1,8 +1,8 @@
 <template>
   <g class="node">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
-    <circle :cx="node.x" :cy="node.y" r="2" :fill="selected?'yellow':'black'"/>
-    <text :x="node.x" :y="node.y" :class="[{'label-unselected':!selected,'label-selected':selected},'text-label']">{{node.label}}</text>
+    <circle :cx="node.x" :cy="node.y" r="2" :class="{'node-unselected':node.state === 'NONE','node-selected':node.state === 'SELECTED','node-available':node.state === 'AVAILABLE'}"/>
+    <text :x="node.x" :y="node.y" :class="[{'label-unselected':node.state === 'NONE','label-selected':node.state === 'SELECTED','label-available':node.state === 'AVAILABLE'},'text-label']">{{node.label}}</text>
   </g>
 </template>
 
@@ -13,10 +13,6 @@ export default {
     node:{
       type:Object,
       required:true
-    },
-    selected:{
-      type:Boolean,
-      default:false
     }
   }
 }
@@ -33,6 +29,22 @@ export default {
 
   .label-selected {
     fill:black;
+  }
+
+  .label-available {
+    fill:whitesmoke;
+  }
+
+  .node-unselected {
+    fill:black;
+  }
+
+  .node-selected {
+    fill:yellow;
+  }
+
+  .node-available {
+    fill:blue;
   }
 
   .text-label{
