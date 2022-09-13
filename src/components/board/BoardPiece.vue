@@ -22,7 +22,7 @@ export default {
       required:true
     },
     piece:{
-      type:String,
+      type:Object,
       required:true
     }
   },

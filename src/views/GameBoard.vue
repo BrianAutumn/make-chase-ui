@@ -9,7 +9,7 @@
         </v-btn>
       </v-card-text>
     </v-card>
-    <svg ref="board" class="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg v-if="board" ref="board" class="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white" />
       <BoardConnection v-for="(connection, i) of board.connections" :key="i" :connection="connection" :nodes="board.nodes" />
       <BoardNode v-for="node of board.nodes" :key="node.label" :node="node"/>
@@ -33,9 +33,6 @@ import * as panzoom from "panzoom";
 export default {
   name: "GameBoard",
   components: {BoardPiece, BoardConnection, BoardNode},
-  mounted(){
-    panzoom(this.$refs.board)
-  },
   methods:{
     ...mapActions(['makeMove']),
     submitMove(){
@@ -50,6 +47,7 @@ export default {
   data(){
     return {
       moveTarget:'',
+      panzoomInit:false
     }
   },
   apollo: {
@@ -76,6 +74,16 @@ export default {
       }
     }
   },
+  watch:{
+    board(){
+      if(!this.panzoomInit){
+        this.panzoomInit = true;
+        this.$nextTick(() => {
+          panzoom(this.$refs.board)
+        })
+      }
+    }
+  }
 }
 </script>
 
