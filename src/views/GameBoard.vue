@@ -57,9 +57,14 @@ export default {
     gameId(){
       return this.$route.params.gameId
     },
+    myRole(){
+      return this?.board?.roles.find(role => role.user._id === this.me._id).role;
+    },
+    myTurn(){
+      return this?.board?.turn === this.myRole;
+    },
     myLocation(){
-      let myRole = this.board.roles.find(role => role.user._id === this.me._id).role;
-      return this.board.pieces.find(piece => piece.label === myRole).location;
+      return this?.board?.pieces.find(piece => piece.label === this.myRole).location;
     },
     adjacentNodes(){
       let adjacentNodes = new Set();
@@ -73,6 +78,10 @@ export default {
     amendedNodes(){
       let amendedNodes = cloneDeep(this.board.nodes);
       for(let node of amendedNodes){
+        node.state = 'NONE'
+        if(!this.myTurn){
+          continue
+        }
         if(node.label === this.selectedNode.label){
           if(this.actionCommitted){
             node.state = 'COMMITTED'
@@ -83,15 +92,17 @@ export default {
         }
         if(!this.actionCommitted && this.adjacentNodes.includes(node.label)){
           node.state = 'AVAILABLE'
-          continue
         }
-        node.state = 'NONE'
       }
       return amendedNodes;
     },
     amendedConnections(){
       let amendedConnections = cloneDeep(this.board.connections);
       for(let connection of amendedConnections){
+        connection.state = 'NONE'
+        if(!this.myTurn){
+          continue
+        }
         if(connection.nodes.includes(this.selectedNode.label) && connection.nodes.includes(this.myLocation) && this.myLocation !== this.selectedNode.label){
           if(this.actionCommitted){
             connection.state = 'COMMITTED'
@@ -102,9 +113,7 @@ export default {
         }
         if(!this.actionCommitted && connection.nodes.includes(this.myLocation)){
           connection.state = 'AVAILABLE'
-          continue;
         }
-        connection.state = 'NONE'
       }
       return amendedConnections
     }
@@ -152,6 +161,10 @@ export default {
           })
         })
       }
+    },
+    myTurn(){
+      this.actionCommitted = false;
+      this.selectedNode = {}
     }
   }
 }
