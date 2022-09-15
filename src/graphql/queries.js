@@ -115,14 +115,17 @@ export const SUBSCRIPTION_BOARD_UPDATES = gql`
     subscription BoardUpdates($gameId: String!) {
         boardUpdates(gameId: $gameId) {
             connections {
+                state
                 nodes
             }
             nodes {
+                state
                 label
                 x
                 y
             }
             pieces {
+                state
                 label
                 location
             }
@@ -133,7 +136,10 @@ export const SUBSCRIPTION_BOARD_UPDATES = gql`
                     displayName
                 }
             }
-            turn
+            turn {
+                role
+                actions
+            }
         }
     }
 `
@@ -142,14 +148,17 @@ export const QUERY_BOARD = gql`
     query Board($gameId: String!) {
         board(gameId: $gameId) {
             connections {
+                state
                 nodes
             }
             nodes {
+                state
                 label
                 x
                 y
             }
             pieces {
+                state
                 label
                 location
             }
@@ -160,7 +169,10 @@ export const QUERY_BOARD = gql`
                     displayName
                 }
             }
-            turn
+            turn {
+                role
+                actions
+            }
         }
     }
 `
