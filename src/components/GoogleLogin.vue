@@ -1,5 +1,5 @@
 <template>
-  <div id="buttonDiv" />
+  <div id="buttonDiv"/>
 </template>
 
 <script>
@@ -15,15 +15,15 @@ export default {
     });
     // eslint-disable-next-line
     google.accounts.id.renderButton(
-      document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large" }  // customization attributes
+        document.getElementById("buttonDiv"),
+        {theme: "outline", size: "large"}  // customization attributes
     );
   },
-  methods:{
-    async login(jwt){
+  methods: {
+    async login(jwt) {
       document.cookie = "g_state=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      let result = await this.$store.dispatch('login',jwt)
-      this.$emit('login',result);
+      let result = await this.$store.dispatch('login', jwt)
+      this.$emit('login', result);
     }
   }
 }

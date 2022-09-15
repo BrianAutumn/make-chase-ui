@@ -2,37 +2,37 @@
   <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}" @click="selected">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
-    <text :x="node.x" :y="node.y" :class="labelClass">{{node.label}}</text>
+    <text :x="node.x" :y="node.y" :class="labelClass">{{ node.label }}</text>
   </g>
 </template>
 
 <script>
 
-const SELECTABLE = ['AVAILABLE','SELECTED']
+const SELECTABLE = ['AVAILABLE', 'SELECTED']
 
 export default {
   name: "BoardNode",
-  props:{
-    node:{
-      type:Object,
-      required:true
+  props: {
+    node: {
+      type: Object,
+      required: true
     }
   },
-  methods:{
-    selected(){
-      if(this.selectable){
-        this.$emit('selected',this.node)
+  methods: {
+    selected() {
+      if (this.selectable) {
+        this.$emit('selected', this.node)
       }
     }
   },
-  computed:{
-    labelClass(){
-      return [`label-${this.node.state.toLowerCase()}`,'text-label']
+  computed: {
+    labelClass() {
+      return [`label-${this.node.state.toLowerCase()}`, 'text-label']
     },
-    nodeClass(){
+    nodeClass() {
       return [`node-${this.node.state.toLowerCase()}`]
     },
-    selectable(){
+    selectable() {
       return SELECTABLE.includes(this.node.state)
     }
   }
@@ -40,45 +40,45 @@ export default {
 </script>
 
 <style scoped>
-  .selectable-node {
-    cursor: pointer;
-  }
+.selectable-node {
+  cursor: pointer;
+}
 
-  .non-selectable-node {
-    cursor:default;
-  }
+.non-selectable-node {
+  cursor: default;
+}
 
-  .label-none {
-    fill:whitesmoke;
-  }
+.label-none {
+  fill: whitesmoke;
+}
 
-  .label-selected {
-    fill:black;
-  }
+.label-selected {
+  fill: black;
+}
 
-  .label-available {
-    fill:whitesmoke;
-  }
+.label-available {
+  fill: whitesmoke;
+}
 
-  .node-none {
-    fill:black;
-  }
+.node-none {
+  fill: black;
+}
 
-  .node-selected {
-    fill:yellow;
-  }
+.node-selected {
+  fill: yellow;
+}
 
-  .node-available {
-    fill:blue;
-  }
+.node-available {
+  fill: blue;
+}
 
-  .node-committed {
-    fill:limegreen;
-  }
+.node-committed {
+  fill: limegreen;
+}
 
-  .text-label{
-    font-size: 2px;
-    text-anchor: middle;
-    dominant-baseline: central;
-  }
+.text-label {
+  font-size: 2px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
 </style>

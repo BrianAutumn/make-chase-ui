@@ -13,56 +13,56 @@ export const router = createRouter({
   routes: [
     {
       path: '/',
-      name:'Home',
+      name: 'Home',
       component: HomePage
     },
     {
-      path:'/defaultAuth',
-      name:'DefaultPageAuth',
-      redirect:{name:'GameBrowser'}
+      path: '/defaultAuth',
+      name: 'DefaultPageAuth',
+      redirect: {name: 'GameBrowser'}
     },
     {
       path: '/login',
-      name:'LoginPage',
+      name: 'LoginPage',
       component: LoginPage
     },
     {
       path: '/games',
-      name:'GameBrowser',
+      name: 'GameBrowser',
       component: GameBrowser,
-      meta:{
-        auth:true
+      meta: {
+        auth: true
       }
     },
     {
       path: '/demo',
-      name:'DemoPage',
+      name: 'DemoPage',
       component: DemoPage,
-      meta:{
-        auth:true
+      meta: {
+        auth: true
       }
     },
     {
       path: '/about',
-      name:'AboutPage',
+      name: 'AboutPage',
       component: AboutPage
     },
     {
       path: '/reference',
-      name:'ReferencePage',
+      name: 'ReferencePage',
       component: ReferenceView
     },
     {
       path: '/game/:gameId',
-      name:'GameBoard',
+      name: 'GameBoard',
       component: GameBoard
     }
   ]
 })
 
-router.beforeEach(async(to) => {
-  if(to.meta.auth && !await store.dispatch('isLoggedIn')){
-    store.commit('loginDestination',{path:to.path});
-    return {name:'LoginPage'};
+router.beforeEach(async (to) => {
+  if (to.meta.auth && !await store.dispatch('isLoggedIn')) {
+    store.commit('loginDestination', {path: to.path});
+    return {name: 'LoginPage'};
   }
 })

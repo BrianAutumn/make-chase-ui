@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        Hello {{me?.displayName}}
+        Hello {{ me?.displayName }}
       </v-col>
     </v-row>
     <v-row>
@@ -14,7 +14,7 @@
       <v-col>
         <div v-for="message of messages" :key="message.messageId">
           <p>
-            {{message.user.displayName}} | {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
+            {{ message.user.displayName }} | {{ message.text }} | {{ new Date(Number.parseInt(message.timestamp)) }}
           </p>
           <br/>
         </div>
@@ -43,8 +43,8 @@ export default {
         },
       }
     },
-    me:{
-      query:QUERY_ME
+    me: {
+      query: QUERY_ME
     }
   },
   methods: {

@@ -1,20 +1,20 @@
 <template>
   <div class="metadata pa-3">
     <div class="divider section pb-2 centered">
-      {{board.turn.substring(0,1).toUpperCase() + board.turn.substring(1).toLowerCase()}}'s Turn
+      {{ board.turn.substring(0, 1).toUpperCase() + board.turn.substring(1).toLowerCase() }}'s Turn
     </div>
     <div class="divider section py-2 centered action-section">
       <p v-if="myTurn && !actionCommitted">
         Make a move!
       </p>
-      <v-progress-circular v-else indeterminate />
+      <v-progress-circular v-else indeterminate/>
     </div>
     <div class="pt-2 section">
       <p>
-        Runner: {{runnerName}}
+        Runner: {{ runnerName }}
       </p>
       <p>
-        Chaser: {{chaserName}}
+        Chaser: {{ chaserName }}
       </p>
     </div>
   </div>
@@ -25,19 +25,19 @@ import {QUERY_ME} from "@/graphql/queries";
 
 export default {
   name: "GameStateIndicator",
-  props:{
-    board: {type:Object},
-    actionCommitted: {type:Boolean}
+  props: {
+    board: {type: Object},
+    actionCommitted: {type: Boolean}
   },
-  computed:{
-    myTurn(){
+  computed: {
+    myTurn() {
       let myRole = this.board.roles.find(role => role.user._id === this.me._id).role;
       return myRole === this.board.turn;
     },
-    chaserName(){
+    chaserName() {
       return this.board.roles.find(role => role.role === 'chaser').user.displayName
     },
-    runnerName(){
+    runnerName() {
       return this.board.roles.find(role => role.role === 'runner').user.displayName
     }
   },

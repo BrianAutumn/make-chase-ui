@@ -25,42 +25,42 @@ import {QUERY_ME} from "@/graphql/queries";
 
 export default {
   name: "CreateGameDialog",
-  data(){
+  data() {
     return {
-      dialog:false,
-      name:''
+      dialog: false,
+      name: ''
     }
   },
-  apollo:{
-    me:{
-      query:QUERY_ME
+  apollo: {
+    me: {
+      query: QUERY_ME
     }
   },
-  methods:{
+  methods: {
     ...mapActions(['createGame']),
-    activate(){
+    activate() {
       console.log('activate');
       this.dialog = true;
     },
-    create(){
-      console.log('name',this.name);
-      this.createGame({name:this.name});
+    create() {
+      console.log('name', this.name);
+      this.createGame({name: this.name});
       this.dialog = false;
       this.reset()
     },
-    reset(){
+    reset() {
       this.name = `${this.me.displayName}'s Game`
     }
   },
-  mounted(){
+  mounted() {
     this.reset();
   }
 }
 </script>
 
 <style scoped>
-.text-field{
-  min-width:600px
+.text-field {
+  min-width: 600px
 }
 
 .card {

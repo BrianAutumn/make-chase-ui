@@ -26,7 +26,7 @@ export default {
   name: "GameBrowser",
   components: {CreateGameDialog, GameCard},
   apollo: {
-    me:{
+    me: {
       query: QUERY_ME
     },
     games: {
@@ -39,14 +39,14 @@ export default {
           }
           let gameUpdate = subscriptionData.data.gameFeed
           let replace = false;
-          for(let i in newResult.games){
-            if(newResult.games[i]._id === gameUpdate._id){
+          for (let i in newResult.games) {
+            if (newResult.games[i]._id === gameUpdate._id) {
               replace = true;
               newResult.games[i] = gameUpdate;
               break;
             }
           }
-          if(!replace){
+          if (!replace) {
             newResult.games.push(gameUpdate);
           }
           return newResult

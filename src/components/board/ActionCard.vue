@@ -14,19 +14,21 @@
 
 export default {
   name: "ActionCard",
-  props:{
-    coords:{
-      type:Object,
-      default:() => {return {x:0,y:0}}
+  props: {
+    coords: {
+      type: Object,
+      default: () => {
+        return {x: 0, y: 0}
+      }
     },
   },
-  methods:{
-    submit(){
+  methods: {
+    submit() {
       this.$emit('submit')
     },
   },
-  computed:{
-    cssVars(){
+  computed: {
+    cssVars() {
       return {
         '--x': `${this.coords.x}px`,
         '--y': `${this.coords.y}px`

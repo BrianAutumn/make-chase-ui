@@ -33,9 +33,9 @@ export const subscriptionClient = wsLink.subscriptionClient;
 const errorLink = onError(({response}) => {
   if (response?.errors)
     response.errors = response.errors.filter(({extensions}) => {
-      if(extensions?.code === 'UNAUTHENTICATED'){
-        store.commit('loginDestination',{path:window.location.pathname})
-        router.push({name:'LoginPage'});
+      if (extensions?.code === 'UNAUTHENTICATED') {
+        store.commit('loginDestination', {path: window.location.pathname})
+        router.push({name: 'LoginPage'});
         return false;
       }
       return true;
