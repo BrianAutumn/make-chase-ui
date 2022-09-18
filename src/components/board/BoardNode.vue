@@ -77,8 +77,12 @@ export default {
   fill: blue;
 }
 
-.node-committed {
+.node-moving {
   fill: limegreen;
+}
+
+.node-blocking {
+  fill: red;
 }
 
 .text-label {

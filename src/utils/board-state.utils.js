@@ -2,20 +2,24 @@ import {cloneDeep} from "@apollo/client/utilities";
 import {getAdjacentNodes, getMyLocation} from "@/utils/board.utils";
 
 export function getAmendedNodes(currentState){
-  let {actionState, board} = currentState;
+  let {actionState, board, actionsSubmitted} = currentState;
   let amendedNodes = cloneDeep(board.nodes);
   universalNodeAmendments({...currentState,amendedNodes})
-  if(nodeAmendingMap[actionState]){
+  if(actionsSubmitted){
+    nodeAmendingMap.SUBMITTED({...currentState,amendedNodes})
+  }else if(nodeAmendingMap[actionState]){
     nodeAmendingMap[actionState]({...currentState,amendedNodes})
   }
   return amendedNodes;
 }
 
 export function getAmendedConnections(currentState){
-  let {actionState, board} = currentState;
+  let {actionState, board, actionsSubmitted} = currentState;
   let amendedConnections = cloneDeep(board.connections);
   universalConnectionAmendments({...currentState,amendedConnections})
-  if(connectionAmendingMap[actionState]){
+  if(actionsSubmitted) {
+    connectionAmendingMap.SUBMITTED({...currentState,amendedConnections})
+  } else if(connectionAmendingMap[actionState]){
     connectionAmendingMap[actionState]({...currentState,amendedConnections})
   }
   return amendedConnections;
@@ -38,36 +42,45 @@ function universalConnectionAmendments({amendedConnections}){
 }
 
 const connectionAmendingMap = {
-  MOVE({board, amendedConnections, myUserId, selected, actionsSubmitted}){
+  SUBMITTED({amendedConnections, committedActions, board, myUserId}){
+    for(let connection of amendedConnections){
+      for(let action of committedActions){
+        let target = JSON.parse(action.args);
+        if(action.code === 'MOVE'){
+          let myLocation = getMyLocation(board,myUserId)
+          if(connection.nodes.includes(myLocation) && connection.nodes.includes(target)){
+            connection.state = ['MOVING']
+          }
+        }else if(action.code === 'BLOCK'){
+          if(JSON.stringify(connection.nodes.sort()) === JSON.stringify(target.sort())){
+            connection.state = ['BLOCKING']
+          }
+        }
+      }
+    }
+  },
+  MOVE({board, amendedConnections, myUserId, selected}){
     let myLocation = getMyLocation(board,myUserId)
     for (let connection of amendedConnections) {
       if(connection.state.includes('BLOCKED')){
         continue;
       }
       if (selected && connection.nodes.includes(selected.label) && connection.nodes.includes(myLocation) && myLocation !== selected.label) {
-        if (actionsSubmitted) {
-          connection.state = ['COMMITTED']
-        } else {
-          connection.state = ['SELECTED']
-        }
+        connection.state = ['SELECTED']
         continue
       }
-      if (!actionsSubmitted && connection.nodes.includes(myLocation)) {
+      if (connection.nodes.includes(myLocation)) {
         connection.state = ['AVAILABLE']
       }
     }
   },
-  BLOCK({amendedConnections, selected, actionsSubmitted}){
+  BLOCK({amendedConnections, selected}){
     for (let connection of amendedConnections) {
       if(connection.state.includes('BLOCKED')){
         continue;
       }
       if (selected && JSON.stringify(selected.nodes.sort()) === JSON.stringify(connection.nodes.sort())) {
-        if (actionsSubmitted) {
-          connection.state = ['COMMITTED']
-        } else {
-          connection.state = ['SELECTED', 'SELECTABLE']
-        }
+        connection.state = ['SELECTED', 'SELECTABLE']
         continue;
       }
       connection.state = ['AVAILABLE', 'SELECTABLE']
@@ -76,18 +89,26 @@ const connectionAmendingMap = {
 }
 
 const nodeAmendingMap = {
-  MOVE({board, amendedNodes, myUserId, selected, actionsSubmitted}){
+  SUBMITTED({amendedNodes, committedActions}) {
+    for (let node of amendedNodes) {
+      for (let action of committedActions) {
+        if(action.code === 'MOVE'){
+          let target = JSON.parse(action.args);
+          if(target === node.label){
+            node.state = ['MOVING']
+          }
+        }
+      }
+    }
+  },
+  MOVE({board, amendedNodes, myUserId, selected}){
     let adjacent = getAdjacentNodes(board,getMyLocation(board,myUserId))
     for (let node of amendedNodes) {
-      if (selected && node.label === selected.label) {
-        if (actionsSubmitted) {
-          node.state = ['COMMITTED']
-        } else {
-          node.state = ['SELECTED', 'SELECTABLE']
-        }
+      if(selected && node.label === selected.label) {
+        node.state = ['SELECTED', 'SELECTABLE']
         continue;
       }
-      if (!actionsSubmitted && adjacent.includes(node.label)) {
+      if (adjacent.includes(node.label)) {
         node.state = ['AVAILABLE', 'SELECTABLE']
       }
     }

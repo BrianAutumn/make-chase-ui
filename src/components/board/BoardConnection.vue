@@ -67,11 +67,15 @@ export default {
   stroke: blue;
 }
 
-.connection-committed {
+.connection-moving {
   stroke: limegreen;
 }
 
 .connection-blocked {
   stroke: lightgray;
+}
+
+.connection-blocking {
+  stroke: red;
 }
 </style>

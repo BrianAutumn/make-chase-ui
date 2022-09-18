@@ -67,7 +67,8 @@ export default {
         myUserId:this.me._id,
         selected:this.selected,
         selectedType:this.selectedType,
-        actionsSubmitted:this.actionsSubmitted
+        actionsSubmitted:this.actionsSubmitted,
+        committedActions:this.committedActions
       })
     },
     amendedConnections(){
@@ -77,7 +78,8 @@ export default {
         myUserId:this.me._id,
         selected:this.selected,
         selectedType:this.selectedType,
-        actionsSubmitted:this.actionsSubmitted
+        actionsSubmitted:this.actionsSubmitted,
+        committedActions:this.committedActions
       })
     }
   },
