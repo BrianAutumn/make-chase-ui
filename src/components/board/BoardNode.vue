@@ -7,9 +7,6 @@
 </template>
 
 <script>
-
-const SELECTABLE = ['AVAILABLE', 'SELECTED']
-
 export default {
   name: "BoardNode",
   props: {
@@ -27,13 +24,21 @@ export default {
   },
   computed: {
     labelClass() {
-      return [`label-${this.node.state.toLowerCase()}`, 'text-label']
+      let classes = ['text-label'];
+      for(let state of this.node.state){
+        classes.push(`label-${state.toLowerCase()}`)
+      }
+      return classes
     },
     nodeClass() {
-      return [`node-${this.node.state.toLowerCase()}`]
+      let classes = [];
+      for(let state of this.node.state){
+        classes.push(`node-${state.toLowerCase()}`)
+      }
+      return classes
     },
     selectable() {
-      return SELECTABLE.includes(this.node.state)
+      return this.node.state.includes('SELECTABLE')
     }
   }
 }

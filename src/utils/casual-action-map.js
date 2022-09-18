@@ -1,10 +1,10 @@
 export const CasualActionMap = {
   MOVE:{
-    short:'Move',
-    long:'Move Piece'
+    short:'Move Here',
+    long:'Move your piece!'
   },
   BLOCK:{
-    short:'Block',
-    long:'Block Path'
+    short:'Block Path',
+    long:'Block a path!'
   }
 }

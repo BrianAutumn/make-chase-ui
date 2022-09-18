@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <GameStateIndicator v-if="board" :board="board" :actionCommitted="actionsSubmitted"/>
+    <GameStateIndicator v-if="board"
+                        :board="board"
+                        :actionsSubmitted="actionsSubmitted"
+                        :current-action="casualActionName.long"
+    />
     <GameBoard v-if="board"
                ref="gameBoard"
                :nodes="amendedNodes"
@@ -25,6 +29,7 @@ import GameStateIndicator from "@/components/board/GameStateIndicator";
 import GameBoard from "@/views/GameBoard";
 import {CasualActionMap} from "@/utils/casual-action-map";
 import {getAmendedConnections, getAmendedNodes} from "@/utils/board-state.utils";
+import {isMyTurn} from "@/utils/board.utils";
 
 export default {
   name: "GameManager",
@@ -32,10 +37,10 @@ export default {
   methods: {
     ...mapActions(['makeActions']),
     commitAction(args){
-      this.committedActions.push({action:this.actionState,args})
+      this.committedActions.push({code:this.actionState,args})
       if(this.committedActions.length === this.board?.turn.actions.length){
         this.actionsSubmitted = true;
-        this.makeActions({gameId: this.gameId, actions: [{code: 'MOVE', args: this.selectedNode.label}]})
+        this.makeActions({gameId: this.gameId, actions: this.committedActions})
       }
     }
   },
@@ -43,14 +48,17 @@ export default {
     gameId() {
       return this.$route.params.gameId
     },
+    myTurn() {
+      return isMyTurn(this.board,this.me?._id);
+    },
     actionState(){
-      if(!this.myTurn){
+      if(!isMyTurn(this.board,this.me._id)){
         return "NOT_TURN"
       }
       return this.board?.turn.actions[this.committedActions.length];
     },
     casualActionName(){
-      return CasualActionMap[this.actionState]?CasualActionMap[this.actionState]:{short:''}
+      return CasualActionMap[this.actionState]?CasualActionMap[this.actionState]:{short:undefined,long:undefined}
     },
     amendedNodes(){
       return getAmendedNodes({
@@ -59,7 +67,7 @@ export default {
         myUserId:this.me._id,
         selected:this.selected,
         selectedType:this.selectedType,
-        actionSubmitted:this.actionSubmitted
+        actionsSubmitted:this.actionsSubmitted
       })
     },
     amendedConnections(){
@@ -69,7 +77,7 @@ export default {
         myUserId:this.me._id,
         selected:this.selected,
         selectedType:this.selectedType,
-        actionSubmitted:this.actionSubmitted
+        actionsSubmitted:this.actionsSubmitted
       })
     }
   },
@@ -108,7 +116,7 @@ export default {
   watch: {
     myTurn() {
       this.actionsSubmitted = false;
-      this.$refs.gameBoard.cancelSelected();
+      this.committedActions = [];
     }
   }
 }

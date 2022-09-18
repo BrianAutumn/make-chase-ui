@@ -1,6 +1,9 @@
 <template>
   <div>
-    <ActionCard v-if="selectedType !== ''" :coords="selectedAnchor" @submit="submitAction"/>
+    <ActionCard v-if="selectedType !== ''"
+                :coords="selectedAnchor"
+                :action-label="actionName"
+                @submit="submitAction"/>
     <svg ref="board" class="board-svg board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white"/>
       <BoardConnection v-for="(connection, i) of connections"
@@ -72,10 +75,19 @@ export default {
       }
     },
     submitAction(){
-      this.$emit('submit', {
-        type:this.selectedType,
-        target:this.selected
-      })
+      if(this.selectedType === 'NODE'){
+        this.$emit('submit', {
+          type:this.selectedType,
+          target:JSON.stringify(this.selected.label)
+        })
+      }else if(this.selectedType === 'CONNECTION'){
+        this.$emit('submit', {
+          type:this.selectedType,
+          target:JSON.stringify(this.selected.nodes)
+        })
+      }
+      this.selected = undefined;
+      this.selectedType = '';
     },
     calculateSelectedAnchor(){
       let board = this.$refs.board.getBoundingClientRect();

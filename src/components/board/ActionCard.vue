@@ -3,7 +3,7 @@
     <v-card class="action-card" :style="cssVars">
       <v-card-text>
         <v-btn @click="submit">
-          Move Here
+          {{actionLabel}}
         </v-btn>
       </v-card-text>
     </v-card>
@@ -21,6 +21,10 @@ export default {
         return {x: 0, y: 0}
       }
     },
+    actionLabel: {
+      type:String,
+      default:'Submit'
+    }
   },
   methods: {
     submit() {

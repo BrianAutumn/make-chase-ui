@@ -6,8 +6,6 @@
 </template>
 
 <script>
-const SELECTABLE = ['AVAILABLE', 'SELECTED']
-
 export default {
   name: "BoardConnection",
   props: {
@@ -35,10 +33,14 @@ export default {
       return this.nodes.find(node => node.label === this.connection.nodes[1])
     },
     connectionClass() {
-      return [`connection-${this.connection.state.toLowerCase()}`]
+      let classes = [];
+      for(let state of this.connection.state){
+        classes.push(`connection-${state.toLowerCase()}`)
+      }
+      return classes
     },
     selectable() {
-      return SELECTABLE.includes(this.connection.state)
+      return this.connection.state.includes('SELECTABLE')
     }
   }
 }
@@ -67,5 +69,9 @@ export default {
 
 .connection-committed {
   stroke: limegreen;
+}
+
+.connection-blocked {
+  stroke: lightgray;
 }
 </style>

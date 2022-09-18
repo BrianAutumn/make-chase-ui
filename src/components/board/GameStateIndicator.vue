@@ -4,8 +4,8 @@
       {{ currentTurnName }}'s Turn
     </div>
     <div class="divider section py-2 centered action-section">
-      <p v-if="myTurn && !actionCommitted">
-        Make a move!
+      <p v-if="myTurn && !actionsSubmitted">
+        {{ currentAction }}
       </p>
       <v-progress-circular v-else indeterminate/>
     </div>
@@ -28,7 +28,8 @@ export default {
   name: "GameStateIndicator",
   props: {
     board: {type: Object},
-    actionCommitted: {type: Boolean}
+    currentAction: {type: String, default:'Make a move!'},
+    actionsSubmitted: {type: Boolean}
   },
   computed: {
     myTurn() {
