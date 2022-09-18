@@ -1,190 +1,118 @@
 <template>
-  <div class="container">
-    <GameStateIndicator v-if="board" :board="board" :actionCommitted="actionCommitted"/>
-    <ActionCard v-if="selectedNode.label && !actionCommitted" :coords="selectedAnchor" @submit="submitAction"/>
-    <svg v-if="board" ref="board" class="board-svg board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <div>
+    <ActionCard v-if="selectedType !== ''" :coords="selectedAnchor" @submit="submitAction"/>
+    <svg ref="board" class="board-svg board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white"/>
-      <BoardConnection v-for="(connection, i) of amendedConnections" :key="i" :connection="connection"
-                       :nodes="board.nodes"/>
-      <BoardNode v-for="node of amendedNodes" :key="node.label" :node="node" @selected="selectNode"/>
-      <BoardPiece v-for="piece of board.pieces" :key="piece.label" :piece="piece" :nodes="board.nodes"/>
+      <BoardConnection v-for="(connection, i) of connections"
+                       :key="i"
+                       :connection="connection"
+                       :nodes="nodes" @selected="selectConnection"/>
+      <BoardNode v-for="node of nodes"
+                 :key="node.label"
+                 :node="node"
+                 @selected="selectNode"/>
+      <BoardPiece v-for="piece of pieces"
+                  :key="piece.label"
+                  :piece="piece"
+                  :nodes="nodes"/>
     </svg>
   </div>
+
 </template>
 
 <script>
-import BoardNode from "@/components/board/BoardNode";
-import BoardConnection from "@/components/board/BoardConnection";
-import BoardPiece from "@/components/board/BoardPiece";
-import {
-  QUERY_BOARD,
-  QUERY_ME,
-  SUBSCRIPTION_BOARD_UPDATES,
-} from "@/graphql/queries";
-import * as panzoom from "panzoom";
-import {cloneDeep} from "@apollo/client/utilities";
 import ActionCard from "@/components/board/ActionCard";
-import {mapActions} from "vuex";
-import GameStateIndicator from "@/components/board/GameStateIndicator";
+import BoardPiece from "@/components/board/BoardPiece";
+import BoardConnection from "@/components/board/BoardConnection";
+import BoardNode from "@/components/board/BoardNode";
+import panzoom from "panzoom";
 
 export default {
   name: "GameBoard",
-  components: {GameStateIndicator, ActionCard, BoardPiece, BoardConnection, BoardNode},
-  methods: {
-    ...mapActions(['makeActions']),
-    selectNode(node) {
-      if (this.selectedNode.label === node.label) {
-        this.selectedNode = {}
-      } else {
-        this.selectedNode = node;
-      }
-      this.calculateSelectedAnchor()
-    },
-    calculateSelectedAnchor() {
-      if (this.selectedNode.label) {
-        let board = this.$refs.board.getBoundingClientRect();
-        this.selectedAnchor = {
-          x: board.x + board.width * ((this.selectedNode.x - 4) / 100),
-          y: board.y + board.height * ((this.selectedNode.y + 4) / 100)
-        }
-      }
-    },
-    submitAction() {
-      this.actionCommitted = true;
-      this.makeActions({gameId: this.gameId, actions: [{code: 'MOVE', args: this.selectedNode.label}]})
-    }
-  },
-  computed: {
-    gameId() {
-      return this.$route.params.gameId
-    },
-    myRole() {
-      return this?.board?.roles.find(role => role.user._id === this.me._id).role;
-    },
-    myTurn() {
-      return this?.board?.turn === this.myRole;
-    },
-    myLocation() {
-      return this?.board?.pieces.find(piece => piece.label === this.myRole).location;
-    },
-    adjacentNodes() {
-      let adjacentNodes = new Set();
-      for (let connection of this.board.connections) {
-        if (connection.nodes.includes(this.myLocation)) {
-          connection.nodes.forEach(node => adjacentNodes.add(node))
-        }
-      }
-      return Array.from(adjacentNodes);
-    },
-    amendedNodes() {
-      let amendedNodes = cloneDeep(this.board.nodes);
-      for (let node of amendedNodes) {
-        node.state = 'NONE'
-        if (!this.myTurn) {
-          continue
-        }
-        if (node.label === this.selectedNode.label) {
-          if (this.actionCommitted) {
-            node.state = 'COMMITTED'
-          } else {
-            node.state = 'SELECTED'
-          }
-          continue
-        }
-        if (!this.actionCommitted && this.adjacentNodes.includes(node.label)) {
-          node.state = 'AVAILABLE'
-        }
-      }
-      return amendedNodes;
-    },
-    amendedConnections() {
-      let amendedConnections = cloneDeep(this.board.connections);
-      for (let connection of amendedConnections) {
-        connection.state = 'NONE'
-        if (!this.myTurn) {
-          continue
-        }
-        if (connection.nodes.includes(this.selectedNode.label) && connection.nodes.includes(this.myLocation) && this.myLocation !== this.selectedNode.label) {
-          if (this.actionCommitted) {
-            connection.state = 'COMMITTED'
-          } else {
-            connection.state = 'SELECTED'
-          }
-          continue;
-        }
-        if (!this.actionCommitted && connection.nodes.includes(this.myLocation)) {
-          connection.state = 'AVAILABLE'
-        }
-      }
-      return amendedConnections
-    }
+  components: {ActionCard, BoardPiece, BoardConnection, BoardNode},
+  props: {
+    connections: {type: Array},
+    pieces: {type: Array},
+    nodes: {type: Array},
+    actionName: {type: String, default:'Submit'}
   },
   data() {
     return {
-      moveTarget: '',
-      panzoomInit: false,
-      selectedNode: {},
-      selectedAnchor: {},
-      actionCommitted: false
+      selected: undefined,
+      selectedType:'',
+      selectedAnchor:{x:0,y:0}
     }
   },
-  apollo: {
-    me: {
-      query: QUERY_ME
+  mounted(){
+    panzoom(this.$refs.board, {zoomDoubleClickSpeed: 1, bounds: true}).on('transform', () => {
+      this.calculateSelectedAnchor()
+    })
+  },
+  methods:{
+    selectNode(node){
+      if(node === this.selected){
+        this.selected = undefined;
+        this.selectedType = '';
+      }else{
+        this.selected = node;
+        this.selectedType = 'NODE';
+      }
     },
-    board: {
-      query: QUERY_BOARD,
-      variables() {
-        return {
-          gameId: this.gameId,
+    cancelSelected(){
+      this.selected = undefined;
+      this.selectedType = '';
+    },
+    selectConnection(connection){
+      if(connection === this.selected){
+        this.selected = undefined;
+        this.selectedType = '';
+      }else{
+        this.selected = connection;
+        this.selectedType = 'CONNECTION';
+      }
+    },
+    submitAction(){
+      this.$emit('submit', {
+        type:this.selectedType,
+        target:this.selected
+      })
+    },
+    calculateSelectedAnchor(){
+      let board = this.$refs.board.getBoundingClientRect();
+      if(this.selectedType === 'NODE'){
+        this.selectedAnchor = {
+          x: board.x + board.width * ((this.selected.x - 4) / 100),
+          y: board.y + board.height * ((this.selected.y + 4) / 100)
         }
-      },
-      subscribeToMore: {
-        document: SUBSCRIPTION_BOARD_UPDATES,
-        updateQuery: (previousResult, {subscriptionData}) => {
-          return {board: subscriptionData.data.boardUpdates}
-        },
-        variables() {
-          return {
-            gameId: this.gameId,
-          }
-        },
+        return;
+      }
+      if(this.selectedType === 'CONNECTION'){
+        let a = this.nodes.find(node => node.label === this.selected.nodes[0]);
+        let b = this.nodes.find(node => node.label === this.selected.nodes[1]);
+        this.selectedAnchor = {
+          x: board.x + board.width * ((Math.abs(a.x - b.x) - 4) / 100),
+          y: board.y + board.height * ((Math.abs(a.y - b.y) + 4) / 100)
+        }
+        return;
+      }
+      this.selectedAnchor = {
+        x:0,
+        y:0
       }
     }
   },
-  watch: {
-    board() {
-      if (!this.panzoomInit) {
-        this.panzoomInit = true;
-        this.$nextTick(() => {
-          panzoom(this.$refs.board, {zoomDoubleClickSpeed: 1, bounds: true}).on('transform', () => {
-            this.calculateSelectedAnchor()
-          })
-        })
-      }
+  watch:{
+    selected(){
+      this.calculateSelectedAnchor();
+      this.$emit('selected:updated',this.selected);
     },
-    myTurn() {
-      this.actionCommitted = false;
-      this.selectedNode = {}
+    selectedType(){
+      this.$emit('selectedType:updated',this.selected);
     }
   }
 }
 </script>
 
 <style scoped>
-.board {
-  background-color: white;
-  z-index: 1;
-}
 
-.board-svg {
-  z-index: 1;
-}
-
-.container {
-  background-color: wheat;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-}
 </style>

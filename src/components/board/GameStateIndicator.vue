@@ -1,7 +1,7 @@
 <template>
   <div class="metadata pa-3">
     <div class="divider section pb-2 centered">
-      {{ board.turn.substring(0, 1).toUpperCase() + board.turn.substring(1).toLowerCase() }}'s Turn
+      {{ currentTurnName }}'s Turn
     </div>
     <div class="divider section py-2 centered action-section">
       <p v-if="myTurn && !actionCommitted">
@@ -22,6 +22,7 @@
 
 <script>
 import {QUERY_ME} from "@/graphql/queries";
+import {isMyTurn} from "@/utils/board.utils";
 
 export default {
   name: "GameStateIndicator",
@@ -31,8 +32,11 @@ export default {
   },
   computed: {
     myTurn() {
-      let myRole = this.board.roles.find(role => role.user._id === this.me._id).role;
-      return myRole === this.board.turn;
+      return isMyTurn(this.board,this.me._id);
+    },
+    currentTurnName(){
+      let turnRole = this.board.turn.role;
+      return turnRole.substring(0, 1).toUpperCase() + turnRole.substring(1).toLowerCase()
     },
     chaserName() {
       return this.board.roles.find(role => role.role === 'chaser').user.displayName

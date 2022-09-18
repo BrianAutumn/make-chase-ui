@@ -48,7 +48,7 @@ export default {
   cursor: default;
 }
 
-.label-none {
+.label-normal {
   fill: whitesmoke;
 }
 
@@ -60,7 +60,7 @@ export default {
   fill: whitesmoke;
 }
 
-.node-none {
+.node-normal {
   fill: black;
 }
 

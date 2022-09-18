@@ -42,7 +42,7 @@ export default {
     ...mapActions(['closeGame', 'joinGame']),
     viewGame() {
       this.$router.push({
-        name: 'GameBoard',
+        name: 'GameManager',
         params: {
           gameId: this.game._id
         }
