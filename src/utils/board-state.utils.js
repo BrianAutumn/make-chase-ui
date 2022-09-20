@@ -5,6 +5,9 @@ export function getAmendedNodes(currentState){
   let {actionState, board, actionsSubmitted} = currentState;
   let amendedNodes = cloneDeep(board.nodes);
   universalNodeAmendments({...currentState,amendedNodes})
+  if(board.victory){
+    return amendedNodes;
+  }
   if(actionsSubmitted){
     nodeAmendingMap.SUBMITTED({...currentState,amendedNodes})
   }else if(nodeAmendingMap[actionState]){
@@ -17,6 +20,9 @@ export function getAmendedConnections(currentState){
   let {actionState, board, actionsSubmitted} = currentState;
   let amendedConnections = cloneDeep(board.connections);
   universalConnectionAmendments({...currentState,amendedConnections})
+  if(board.victory){
+    return amendedConnections;
+  }
   if(actionsSubmitted) {
     connectionAmendingMap.SUBMITTED({...currentState,amendedConnections})
   } else if(connectionAmendingMap[actionState]){

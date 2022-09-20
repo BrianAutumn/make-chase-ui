@@ -1,8 +1,8 @@
 <template>
   <v-card
-      :class="{'lobby-game':game.state === 'LOBBY','closed-game':game.state === 'CLOSED','active-game':game.state === 'ACTIVE'}">
+      :class="{'lobby-game':game.state === 'LOBBY','closed-game':game.state === 'CLOSED','active-game':game.state === 'ACTIVE','complete-game':game.state === 'COMPLETE'}">
     <v-card-title>
-      <v-btn class="mr-2" @click="viewGame" v-show="game.state === 'ACTIVE'">
+      <v-btn class="mr-2" @click="viewGame" v-show="game.state === 'ACTIVE' || game.state === 'COMPLETE'">
         View
       </v-btn>
       <v-btn class="mr-2" @click="closeGame(game._id)"
@@ -70,5 +70,9 @@ export default {
 
 .active-game {
   background-color: #e8dff5
+}
+
+.complete-game {
+  background-color: #d2ffd2;
 }
 </style>

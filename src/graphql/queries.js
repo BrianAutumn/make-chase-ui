@@ -140,6 +140,7 @@ export const SUBSCRIPTION_BOARD_UPDATES = gql`
             turn {
                 role
                 actions
+                count
             }
         }
     }
@@ -174,6 +175,7 @@ export const QUERY_BOARD = gql`
             turn {
                 role
                 actions
+                count
             }
         }
     }

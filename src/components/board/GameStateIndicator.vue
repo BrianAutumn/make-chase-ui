@@ -1,13 +1,21 @@
 <template>
   <div class="metadata pa-3">
-    <div class="divider section pb-2 centered">
+    <div class="divider section pb-2 centered" v-if="!board.victory">
       {{ currentTurnName }}'s Turn
     </div>
-    <div class="divider section py-2 centered action-section">
+    <div class="divider section pb-2 centered" v-else>
+      {{ board.roles.find(role => role.role === board.victory).user.displayName }} Won!
+    </div>
+    <div class="divider section py-2 centered action-section" v-if="!board.victory">
       <p v-if="myTurn && !actionsSubmitted">
         {{ currentAction }}
       </p>
       <v-progress-circular v-else indeterminate/>
+    </div>
+    <div class="divider section py-2 centered action-section">
+      <p>
+        Turn {{board.turn.count}}
+      </p>
     </div>
     <div class="pt-2 section">
       <p>

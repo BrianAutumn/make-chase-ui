@@ -2,7 +2,6 @@
   <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}" @click="selected">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
-    <text :x="node.x" :y="node.y" :class="labelClass">{{ node.label }}</text>
   </g>
 </template>
 
@@ -23,13 +22,6 @@ export default {
     }
   },
   computed: {
-    labelClass() {
-      let classes = ['text-label'];
-      for(let state of this.node.state){
-        classes.push(`label-${state.toLowerCase()}`)
-      }
-      return classes
-    },
     nodeClass() {
       let classes = [];
       for(let state of this.node.state){
@@ -53,18 +45,6 @@ export default {
   cursor: default;
 }
 
-.label-normal {
-  fill: whitesmoke;
-}
-
-.label-selected {
-  fill: black;
-}
-
-.label-available {
-  fill: whitesmoke;
-}
-
 .node-normal {
   fill: black;
 }
@@ -83,6 +63,10 @@ export default {
 
 .node-blocking {
   fill: red;
+}
+
+.node-blocked {
+  fill: lightgray;
 }
 
 .text-label {
