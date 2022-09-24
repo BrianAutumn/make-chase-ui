@@ -1,16 +1,12 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <CreateGameDialog/>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
+  <div class="main-wrapper">
+    <div class="main-container">
+      <CreateGameDialog/>
+      <v-sheet elevation="1" class="game-list">
         <GameCard class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-sheet>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -62,5 +58,24 @@ export default {
 </script>
 
 <style scoped>
+.game-list {
+  overflow-y: scroll;
+  margin-top: 10px;
+  padding: 10px;
+  max-height: 90vh;
+  max-width: 1000px;
+  min-width: 800px;
+}
 
+.main-container {
+  margin: auto;
+  padding-top: 10px;
+  width: fit-content;
+}
+
+.main-wrapper {
+  background-color: #fffbe0;
+  width: 100vw;
+  height: 100vh;
+}
 </style>

@@ -14,9 +14,6 @@
         Join
       </v-btn>
       <span>{{ game.name }}</span>
-      <span class="ml-2 subtitle-1">{{ game.users[0].displayName }} v </span>
-      <span v-if="game.users.length === 1">...</span>
-      <span v-else>{{ game.users[1].displayName }}</span>
     </v-card-title>
   </v-card>
 </template>
