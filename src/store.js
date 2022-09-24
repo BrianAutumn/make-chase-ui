@@ -42,11 +42,12 @@ export const store = createStore({
         }
       })
     },
-    async createGame(context, {name}) {
+    async createGame(context, {name,map}) {
       return (await apolloClient.mutate({
         mutation: MUTATION_CREATE_GAME,
         variables: {
-          name
+          name,
+          map
         }
       })).data.createGame
     },

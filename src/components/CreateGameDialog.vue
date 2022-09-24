@@ -51,7 +51,7 @@ export default {
     },
     create() {
       console.log('name', this.name);
-      this.createGame({name: this.name});
+      this.createGame({name: this.name, map:this.map});
       this.dialog = false;
       this.reset()
     },

@@ -44,8 +44,8 @@ export const SUBSCRIPTION_GAMES_FEED = gql`
 `
 
 export const MUTATION_CREATE_GAME = gql`
-    mutation CreateGame($name: String!) {
-        createGame(name: $name) {
+    mutation CreateGame($name: String!, $map: String!) {
+        createGame(name: $name, map: $map) {
             _id
             name
             users {
