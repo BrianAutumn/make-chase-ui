@@ -31,6 +31,7 @@ export default {
     },
     games: {
       query: QUERY_GAMES,
+      fetchPolicy: 'network-only',
       subscribeToMore: {
         document: SUBSCRIPTION_GAMES_FEED,
         updateQuery: (previousResult, {subscriptionData}) => {

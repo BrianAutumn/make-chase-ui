@@ -97,6 +97,7 @@ export default {
     },
     board: {
       query: QUERY_BOARD,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           gameId: this.gameId,
