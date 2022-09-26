@@ -3,7 +3,7 @@ import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import {appConf} from "@/appConf";
 import {createApolloProvider} from "@vue/apollo-option";
-import {QUERY_ME} from "@/graphql/queries";
+import {QUERY_SESSION} from "@/graphql/queries";
 import {onError} from "apollo-link-error";
 import {router} from "@/router";
 import {store} from "@/store";
@@ -21,8 +21,8 @@ const wsLink = new WebSocketLink({
     async connectionParams() {
       return {
         authToken: (await apolloClient.query({
-          query: QUERY_ME
-        })).data.me
+          query: QUERY_SESSION
+        })).data.session
       }
     }
   },
@@ -33,9 +33,9 @@ export const subscriptionClient = wsLink.subscriptionClient;
 const errorLink = onError(({response}) => {
   if (response?.errors)
     response.errors = response.errors.filter(({extensions}) => {
-      if(extensions?.code === 'UNAUTHENTICATED'){
-        store.commit('loginDestination',{path:window.location.pathname})
-        router.push({name:'LoginPage'});
+      if (extensions?.code === 'UNAUTHENTICATED') {
+        store.commit('loginDestination', {path: window.location.pathname})
+        router.push({name: 'LoginPage'});
         return false;
       }
       return true;

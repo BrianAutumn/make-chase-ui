@@ -5,52 +5,64 @@ import HomePage from "@/views/HomePage";
 import {store} from "@/store";
 import DemoPage from "@/views/DemoPage";
 import AboutPage from "@/views/AboutPage";
+import ReferenceView from "@/views/ReferenceView";
+import GameManager from "@/views/GameManager";
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
-      name:'Home',
+      name: 'Home',
       component: HomePage
     },
     {
-      path:'/defaultAuth',
-      name:'DefaultPageAuth',
-      redirect:{name:'GameBrowser'}
+      path: '/defaultAuth',
+      name: 'DefaultPageAuth',
+      redirect: {name: 'GameBrowser'}
     },
     {
       path: '/login',
-      name:'LoginPage',
+      name: 'LoginPage',
       component: LoginPage
     },
     {
       path: '/games',
-      name:'GameBrowser',
+      name: 'GameBrowser',
       component: GameBrowser,
-      meta:{
-        auth:true
+      meta: {
+        auth: true
       }
     },
     {
       path: '/demo',
-      name:'DemoPage',
+      name: 'DemoPage',
       component: DemoPage,
-      meta:{
-        auth:true
+      meta: {
+        auth: true
       }
     },
     {
       path: '/about',
-      name:'AboutPage',
+      name: 'AboutPage',
       component: AboutPage
+    },
+    {
+      path: '/reference',
+      name: 'ReferencePage',
+      component: ReferenceView
+    },
+    {
+      path: '/game/:gameId',
+      name: 'GameManager',
+      component: GameManager
     }
   ]
 })
 
-router.beforeEach(async(to) => {
-  if(to.meta.auth && !await store.dispatch('isLoggedIn')){
-    store.commit('loginDestination',{path:to.path});
-    return {name:'LoginPage'};
+router.beforeEach(async (to) => {
+  if (to.meta.auth && !await store.dispatch('isLoggedIn')) {
+    store.commit('loginDestination', {path: to.path});
+    return {name: 'LoginPage'};
   }
 })
