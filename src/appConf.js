@@ -4,6 +4,6 @@ export const appConf = {
   },
   apollo: {
     httpUrl: 'http://makechase.com/api',
-    wsUrl: 'ws://makechase.com'
+    wsUrl: 'ws://makechase.com/ws'
   }
 }
