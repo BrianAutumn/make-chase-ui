@@ -91,26 +91,32 @@ export default {
     },
     calculateSelectedAnchor(){
       let board = this.$refs.board.getBoundingClientRect();
+      let origWidth = 100;
+      let origHeight = 100;
+      this.selectedAnchor = {
+        x:0,
+        y:0
+      }
       if(this.selectedType === 'NODE'){
         this.selectedAnchor = {
-          x: board.x + board.width * ((this.selected.x - 4) / 100),
-          y: board.y + board.height * ((this.selected.y + 4) / 100)
+          x: this.selected.x + 2,
+          y: this.selected.y + 2
         }
-        return;
       }
       if(this.selectedType === 'CONNECTION'){
         let a = this.nodes.find(node => node.label === this.selected.nodes[0]);
         let b = this.nodes.find(node => node.label === this.selected.nodes[1]);
         this.selectedAnchor = {
-          x: board.x + board.width * ((Math.abs(a.x - b.x) - 4) / 100),
-          y: board.y + board.height * ((Math.abs(a.y - b.y) + 4) / 100)
+          x: (Math.abs(a.x - b.x) / 2) + Math.min(a.x,b.x) + 1,
+          y: (Math.abs(a.y - b.y) / 2) + Math.min(a.y,b.y) + 1
         }
-        return;
       }
+      console.log('before',this.selectedAnchor)
       this.selectedAnchor = {
-        x:0,
-        y:0
+        x:board.x + board.width * (this.selectedAnchor.x / origWidth),
+        y:board.y + board.height * (this.selectedAnchor.y / origHeight)
       }
+      console.log('after',this.selectedAnchor)
     }
   },
   watch:{
