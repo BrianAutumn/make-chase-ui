@@ -4,7 +4,6 @@ export const MUTATION_LOGIN = gql`
     mutation Login($jwt: String!) {
         login(jwt: $jwt) {
             success
-            authToken
         }
     }
 `

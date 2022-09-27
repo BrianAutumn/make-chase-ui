@@ -24,16 +24,15 @@ export const store = createStore({
         variables: {
           jwt: JSON.stringify(jwt)
         }
-      })).data.login;
-      if (result.success) {
-        document.cookie = `session=${result.authToken}; path=/;`
+      })).data.login.success;
+      if (result) {
         await apolloClient.query({
           query: QUERY_ME,
           fetchPolicy: 'network-only'
         });
         subscriptionClient.close(false, false);
       }
-      return result.success;
+      return result;
     },
     async sendMessage() {
       await apolloClient.mutate({
