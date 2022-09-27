@@ -26,7 +26,7 @@ export const store = createStore({
         }
       })).data.login;
       if (result.success) {
-        document.cookie = `session=${result.authToken};`
+        document.cookie = `session=${result.authToken}; path=/;`
         await apolloClient.query({
           query: QUERY_ME,
           fetchPolicy: 'network-only'
