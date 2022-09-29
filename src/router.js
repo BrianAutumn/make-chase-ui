@@ -7,6 +7,8 @@ import DemoPage from "@/views/DemoPage";
 import AboutPage from "@/views/AboutPage";
 import ReferenceView from "@/views/ReferenceView";
 import GameManager from "@/views/GameManager";
+import PrivacyNotice from "@/views/PrivacyNotice";
+import TermsNotice from "@/views/TermsNotice";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -35,22 +37,17 @@ export const router = createRouter({
       }
     },
     {
-      path: '/demo',
-      name: 'DemoPage',
-      component: DemoPage,
+      path: '/privacy',
+      name: 'Privacy',
+      component: PrivacyNotice,
       meta: {
         auth: true
       }
     },
     {
-      path: '/about',
-      name: 'AboutPage',
-      component: AboutPage
-    },
-    {
-      path: '/reference',
-      name: 'ReferencePage',
-      component: ReferenceView
+      path: '/tos',
+      name: 'Terms',
+      component: TermsNotice
     },
     {
       path: '/game/:gameId',

@@ -12,12 +12,12 @@
     </v-row>
     <v-row>
       <v-col>
-        <router-link :to="{name:'DemoPage'}">Demo Page</router-link>
+        <router-link :to="{name:'Privacy'}">Privacy Notice</router-link>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <router-link :to="{name:'AboutPage'}">About Page</router-link>
+        <router-link :to="{name:'Terms'}">Terms of Service Notice</router-link>
       </v-col>
     </v-row>
   </v-container>
