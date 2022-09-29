@@ -36,10 +36,7 @@ export const router = createRouter({
     {
       path: '/privacy',
       name: 'Privacy',
-      component: PrivacyNotice,
-      meta: {
-        auth: true
-      }
+      component: PrivacyNotice
     },
     {
       path: '/tos',
