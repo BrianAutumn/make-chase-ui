@@ -61,6 +61,7 @@ export const store = createStore({
       }))
     },
     async isLoggedIn() {
+      console.log('QUERY_ME',QUERY_ME)
       return (await apolloClient.query({
         query: QUERY_ME
       })).data.me !== 'undefined';

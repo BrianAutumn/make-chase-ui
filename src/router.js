@@ -61,8 +61,11 @@ export const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  console.log('A')
   if (to.meta.auth && !await store.dispatch('isLoggedIn')) {
+    console.log('B')
     store.commit('loginDestination', {path: to.path});
+    console.log('C')
     return {name: 'LoginPage'};
   }
 })
