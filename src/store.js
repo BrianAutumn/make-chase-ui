@@ -61,10 +61,14 @@ export const store = createStore({
       }))
     },
     async isLoggedIn() {
-      console.log('QUERY_ME',QUERY_ME)
-      return (await apolloClient.query({
-        query: QUERY_ME
-      })).data.me !== 'undefined';
+      try {
+        return (await apolloClient.query({
+          query: QUERY_ME
+        })).data.me !== 'undefined';
+      } catch (e){
+        console.log(e);
+        return false;
+      }
     },
     async closeGame(context, gameId) {
       return (await apolloClient.mutate({
