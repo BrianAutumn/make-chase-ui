@@ -4,6 +4,12 @@ module.exports = {
       '^/api': {
         target: 'http://localhost:3000',
         pathRewrite: {'^/api': ''}
+      },
+      '^/wss': {
+        target: 'http://localhost:3001',
+        pathRewrite: {'^/wss': ''},
+        ws:true,
+        changeOrigin: true
       }
     }
   },
