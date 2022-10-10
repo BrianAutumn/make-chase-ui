@@ -8,6 +8,7 @@ import {appConf} from "@/appConf";
 export default {
   name: "GoogleLogin",
   mounted() {
+    console.log('AppConf',appConf)
     // eslint-disable-next-line
     google.accounts.id.initialize({
       client_id: appConf.google.clientId,
