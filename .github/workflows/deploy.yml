@@ -34,6 +34,7 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number }}
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           OFFLINE: ''
       - name: Get dependencies
         run: npm ci
