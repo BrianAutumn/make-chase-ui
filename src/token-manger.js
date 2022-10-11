@@ -11,5 +11,6 @@ export function getToken(name){
 }
 
 function isSet(tokenValue, name){
+  console.log('Test Flag')
   return tokenValue !== `##${name}##`
 }
