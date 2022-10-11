@@ -11,5 +11,5 @@ export function getToken(name){
 }
 
 function isSet(tokenValue){
-  return !tokenValue.startsWith('###') && !tokenValue.endsWith('###')
+  return !tokenValue.startsWith('##') && !tokenValue.endsWith('##')
 }
