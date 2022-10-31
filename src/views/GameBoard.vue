@@ -47,7 +47,13 @@ export default {
     }
   },
   mounted(){
-    panzoom(this.$refs.board, {zoomDoubleClickSpeed: 1, bounds: true}).on('transform', () => {
+    panzoom(this.$refs.board, {
+      zoomDoubleClickSpeed: 1,
+      onTouch() {
+        return false; // tells the library to not preventDefault.
+      },
+      bounds: true
+    }).on('transform', () => {
       this.calculateSelectedAnchor()
     })
   },
