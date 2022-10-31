@@ -50,7 +50,6 @@ export default {
     panzoom(this.$refs.board, {
       zoomDoubleClickSpeed: 1,
       onTouch() {
-        return false; // tells the library to not preventDefault.
       },
       bounds: true
     }).on('transform', () => {
@@ -117,12 +116,10 @@ export default {
           y: (Math.abs(a.y - b.y) / 2) + Math.min(a.y,b.y) + 1
         }
       }
-      console.log('before',this.selectedAnchor)
       this.selectedAnchor = {
         x:board.x + board.width * (this.selectedAnchor.x / origWidth),
         y:board.y + board.height * (this.selectedAnchor.y / origHeight)
       }
-      console.log('after',this.selectedAnchor)
     }
   },
   watch:{
