@@ -49,7 +49,9 @@ export default {
   mounted(){
     panzoom(this.$refs.board, {
       zoomDoubleClickSpeed: 1,
-      onTouch() {
+      onTouch(e) {
+        e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}))
+        return true;
       },
       bounds: true
     }).on('transform', () => {
