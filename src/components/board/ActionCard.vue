@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="action-card" :style="cssVars">
+    <v-card class="action-card" :style="cssVars" @touchstart="onTouchStart">
       <v-card-text>
         <v-btn @click="submit">
           {{actionLabel}}
@@ -30,6 +30,9 @@ export default {
     submit() {
       this.$emit('submit')
     },
+    onTouchStart(e){
+      e.stopPropagation();
+    }
   },
   computed: {
     cssVars() {
