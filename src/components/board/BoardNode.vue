@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}" @click="onClick" @touchend="onClick">
+  <g :class="[{'selectable-node':selectable,'non-selectable-node':!selectable},'no-pan']" @click="onClick" @touchend="onClick" @touchstart="onTouchStart">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
   </g>
@@ -15,9 +15,15 @@ export default {
     }
   },
   methods: {
-    onClick() {
+    onClick(e) {
       if (this.selectable) {
         this.$emit('selected', this.node)
+        e.stopPropagation();
+      }
+    },
+    onTouchStart(e){
+      if(this.selectable){
+        e.stopPropagation();
       }
     }
   },

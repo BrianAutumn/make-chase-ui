@@ -49,6 +49,7 @@ export default {
   mounted(){
     panzoom(this.$refs.board, {
       zoomDoubleClickSpeed: 1,
+      excludeClass:'no-pan',
       bounds: true
     }).on('transform', () => {
       this.calculateSelectedAnchor()
