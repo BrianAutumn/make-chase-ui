@@ -1,13 +1,11 @@
 <template>
-  <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}">
+  <g :class="{'selectable-node':selectable,'non-selectable-node':!selectable}" @click="onClick" @touchend="onClick">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
   </g>
 </template>
 
 <script>
-import {TouchClickMixin} from "@/mixins/touch-click.mixin";
-
 export default {
   name: "BoardNode",
   props: {
@@ -16,7 +14,6 @@ export default {
       required: true
     }
   },
-  mixins:[TouchClickMixin()],
   methods: {
     onClick() {
       if (this.selectable) {
