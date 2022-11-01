@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'selectable':selectable,'non-selectable':!selectable}" @click="selected">
+  <g :class="{'selectable':selectable,'non-selectable':!selectable}" @click="onClick" @touchend="onClick" @touchstart="onTouchStart">
     <line :x1="from.x" :y1="from.y" :x2="to.x" :y2="to.y" stroke="white" stroke-width="2"/>
     <line :x1="from.x" :y1="from.y" :x2="to.x" :y2="to.y" :class="connectionClass" stroke-width="0.5"/>
   </g>
@@ -19,9 +19,14 @@ export default {
     }
   },
   methods: {
-    selected() {
+    onClick() {
       if (this.selectable) {
         this.$emit('selected', this.connection)
+      }
+    },
+    onTouchStart(e){
+      if(this.selectable){
+        e.stopPropagation();
       }
     }
   },
