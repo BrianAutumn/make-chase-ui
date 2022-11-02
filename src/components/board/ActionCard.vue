@@ -2,7 +2,7 @@
   <div>
     <v-card class="action-card" :style="cssVars" @touchstart="onTouchStart">
       <v-card-text>
-        <v-btn @click="submit">
+        <v-btn @click="submit" @touchend="submit">
           {{actionLabel}}
         </v-btn>
       </v-card-text>
