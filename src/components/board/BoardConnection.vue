@@ -1,5 +1,5 @@
 <template>
-  <g :class="{'selectable':selectable,'non-selectable':!selectable}" @click="onClick" @touchend="onClick" @touchstart="touchFix" @touchmove="touchFix">
+  <g :class="{'selectable':selectable,'non-selectable':!selectable}" @click="onClick" @touchend="onClick" @touchstart="touchFix">
     <line :x1="from.x" :y1="from.y" :x2="to.x" :y2="to.y" stroke="white" stroke-width="2"/>
     <line :x1="from.x" :y1="from.y" :x2="to.x" :y2="to.y" :class="connectionClass" stroke-width="0.5"/>
   </g>
@@ -27,6 +27,7 @@ export default {
     touchFix(e){
       if(this.selectable && !this.selected){
         e.stopPropagation();
+        e.preventDefault()
       }
     }
   },

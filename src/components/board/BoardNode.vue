@@ -1,5 +1,5 @@
 <template>
-  <g :class="[{'selectable-node':selectable,'non-selectable-node':!selectable},'no-pan']" @click="onClick" @touchend="onClick" @touchstart="touchFix" @touchmove="touchFix">
+  <g :class="[{'selectable-node':selectable,'non-selectable-node':!selectable},'no-pan']" @click="onClick" @touchend="onClick" @touchstart="touchFix">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
   </g>
@@ -24,6 +24,7 @@ export default {
     touchFix(e){
       if(this.selectable && !this.selected){
         e.stopPropagation();
+        e.preventDefault();
       }
     },
     selected() {
