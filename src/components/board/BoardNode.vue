@@ -22,13 +22,11 @@ export default {
       }
     },
     touchFix(e){
+      console.log(this.selected)
       if(this.selectable && !this.selected){
         e.stopPropagation();
         e.preventDefault();
       }
-    },
-    selected() {
-      return this.connection.state.includes('SELECTED')
     }
   },
   computed: {
@@ -41,6 +39,9 @@ export default {
     },
     selectable() {
       return this.node.state.includes('SELECTABLE')
+    },
+    selected() {
+      return this.node.state.includes('SELECTED')
     }
   }
 }
