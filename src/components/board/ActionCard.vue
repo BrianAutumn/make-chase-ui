@@ -32,6 +32,7 @@ export default {
     },
     onTouchStart(e){
       e.stopPropagation();
+      e.preventDefault();
     }
   },
   computed: {
