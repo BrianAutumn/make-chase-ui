@@ -1,5 +1,5 @@
 <template>
-  <g :class="[{'selectable-node':selectable,'non-selectable-node':!selectable},'no-pan']" @click="onClick" @touchend="onClick" @touchstart="onTouchStart">
+  <g :class="[{'selectable-node':selectable,'non-selectable-node':!selectable},'no-pan']" @click="onClick" @touchend="onClick" @touchstart="touchFix" @touchmove="touchFix">
     <circle :cx="node.x" :cy="node.y" r="3" fill="white"/>
     <circle :cx="node.x" :cy="node.y" r="2" :class="nodeClass"/>
   </g>
@@ -21,10 +21,13 @@ export default {
         e.stopPropagation();
       }
     },
-    onTouchStart(e){
-      if(this.selectable){
+    touchFix(e){
+      if(this.selectable && !this.selected){
         e.stopPropagation();
       }
+    },
+    selected() {
+      return this.connection.state.includes('SELECTED')
     }
   },
   computed: {
