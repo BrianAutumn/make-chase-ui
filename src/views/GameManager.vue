@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <div class="background" :style="{'--transformX':`${((transformX / 20) % 100) - 100}vw`,'--transformY':`${((transformY / 20)  % 100) - 100}vh`}"></div>
     <GameStateIndicator v-if="board"
                         :board="board"
                         :actionsSubmitted="actionsSubmitted"
@@ -14,6 +15,7 @@
                @submit="commitAction($event.target)"
                @selected:updated="this.selected = $event"
                @selectedType:updated="this.selectedType = $event"
+               @transform="transform"
     />
   </div>
 </template>
@@ -42,6 +44,10 @@ export default {
         this.actionsSubmitted = true;
         this.makeActions({gameId: this.gameId, actions: this.committedActions})
       }
+    },
+    transform(e){
+      this.transformX = e.x;
+      this.transformY = e.y;
     }
   },
   computed: {
@@ -88,7 +94,9 @@ export default {
       actionsSubmitted: false,
       committedActions:[],
       selected:undefined,
-      selectedType:undefined
+      selectedType:undefined,
+      transformX:0,
+      transformY:0
     }
   },
   apollo: {
@@ -126,19 +134,22 @@ export default {
 </script>
 
 <style scoped>
-.board {
-  background-color: white;
-  z-index: 1;
-}
-
-.board-svg {
-  z-index: 1;
-}
-
 .container {
-  background-color: wheat;
   position: fixed;
   height: 100%;
   width: 100%;
+
+}
+
+.background {
+  position: absolute;
+  z-index: -1;
+  background-color: #182525;
+  width:300vw;
+  height:300vh;
+  background-image: radial-gradient(#313131 3%, transparent 11%), radial-gradient(#313131 3%, transparent 11%);
+  background-repeat: repeat;
+  background-size: 0 0, 30px 30px;
+  transform: translate(var(--transformX), var(--transformY));
 }
 </style>

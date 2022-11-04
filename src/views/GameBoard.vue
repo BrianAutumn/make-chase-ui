@@ -4,21 +4,23 @@
                 :coords="selectedAnchor"
                 :action-label="actionName"
                 @submit="submitAction"/>
-    <svg ref="board" class="board-svg board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100%" height="100%" fill="white"/>
-      <BoardConnection v-for="(connection, i) of connections"
-                       :key="i"
-                       :connection="connection"
-                       :nodes="nodes" @selected="selectConnection"/>
-      <BoardNode v-for="node of nodes"
-                 :key="node.label"
-                 :node="node"
-                 @selected="selectNode"/>
-      <BoardPiece v-for="piece of pieces"
-                  :key="piece.label"
-                  :piece="piece"
-                  :nodes="nodes"/>
-    </svg>
+    <div class="board-container">
+        <svg class="board-svg board" ref="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="white"/>
+          <BoardConnection v-for="(connection, i) of connections"
+                           :key="i"
+                           :connection="connection"
+                           :nodes="nodes" @selected="selectConnection"/>
+          <BoardNode v-for="node of nodes"
+                     :key="node.label"
+                     :node="node"
+                     @selected="selectNode"/>
+          <BoardPiece v-for="piece of pieces"
+                      :key="piece.label"
+                      :piece="piece"
+                      :nodes="nodes"/>
+        </svg>
+    </div>
   </div>
 
 </template>
@@ -47,13 +49,16 @@ export default {
     }
   },
   mounted(){
-    panzoom(this.$refs.board, {
+    let board = panzoom(this.$refs.board, {
       zoomDoubleClickSpeed: 1,
-      excludeClass:'no-pan',
-      bounds: true
-    }).on('transform', () => {
-      this.calculateSelectedAnchor()
+      bounds: false
     })
+    board.on('transform', (e) => {
+      this.calculateSelectedAnchor()
+      this.$emit('transform',e.getTransform())
+    })
+    board.zoomTo(0,0,2/3)
+    board.moveTo(-window.innerWidth/3,-window.innerHeight/3)
   },
   methods:{
     selectNode(node){
@@ -134,5 +139,20 @@ export default {
 </script>
 
 <style scoped>
+.board-svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
 
+.board-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width:100vw;
+  height:100vh;
+}
 </style>
