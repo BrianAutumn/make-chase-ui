@@ -5,7 +5,8 @@
                 :action-label="actionName"
                 @submit="submitAction"/>
     <div class="board-container">
-        <svg class="board-svg board" ref="board" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <div ref="board" class="test-div">
+        <svg class="board-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <rect width="100%" height="100%" fill="white"/>
           <BoardConnection v-for="(connection, i) of connections"
                            :key="i"
@@ -20,6 +21,7 @@
                       :piece="piece"
                       :nodes="nodes"/>
         </svg>
+      </div>
     </div>
   </div>
 
@@ -39,100 +41,108 @@ export default {
     connections: {type: Array},
     pieces: {type: Array},
     nodes: {type: Array},
-    actionName: {type: String, default:'Submit'}
+    actionName: {type: String, default: 'Submit'}
   },
   data() {
     return {
       selected: undefined,
-      selectedType:'',
-      selectedAnchor:{x:0,y:0}
+      selectedType: '',
+      selectedAnchor: {x: 0, y: 0}
     }
   },
-  mounted(){
-    let board = panzoom(this.$refs.board, {
-      zoomDoubleClickSpeed: 1,
-      bounds: false
-    })
-    board.on('transform', (e) => {
-      this.calculateSelectedAnchor()
-      this.$emit('transform',e.getTransform())
-    })
-    board.zoomTo(0,0,2/3)
-    board.moveTo(-window.innerWidth/3,-window.innerHeight/3)
+  mounted() {
+    setTimeout(() => {
+      let board = panzoom(this.$refs.board, {
+        zoomDoubleClickSpeed: 1,
+        bounds: true
+      })
+      board.on('transform', (e) => {
+        this.calculateSelectedAnchor()
+        let transform = e.getTransform()
+        this.$emit('transform', transform)
+        console.log(transform)
+      })
+      let smallestDimension = Math.min(window.innerHeight,window.innerWidth);
+      let goalSize = smallestDimension * 7/8;
+      let scale = goalSize / 100;
+      board.zoomTo(0,0,scale)
+      board.moveTo(window.innerWidth/2 - goalSize/2,window.innerHeight/2 - goalSize/2)
+
+    }, 1000)
   },
-  methods:{
-    selectNode(node){
-      if(node === this.selected){
+  methods: {
+    selectNode(node) {
+      if (node === this.selected) {
         this.selected = undefined;
         this.selectedType = '';
-      }else{
+      } else {
         this.selected = node;
         this.selectedType = 'NODE';
       }
     },
-    cancelSelected(){
+    cancelSelected() {
       this.selected = undefined;
       this.selectedType = '';
     },
-    selectConnection(connection){
-      if(connection === this.selected){
+    selectConnection(connection) {
+      if (connection === this.selected) {
         this.selected = undefined;
         this.selectedType = '';
-      }else{
+      } else {
         this.selected = connection;
         this.selectedType = 'CONNECTION';
       }
     },
-    submitAction(){
-      if(this.selectedType === 'NODE'){
+    submitAction() {
+      if (this.selectedType === 'NODE') {
         this.$emit('submit', {
-          type:this.selectedType,
-          target:JSON.stringify(this.selected.label)
+          type: this.selectedType,
+          target: JSON.stringify(this.selected.label)
         })
-      }else if(this.selectedType === 'CONNECTION'){
+      } else if (this.selectedType === 'CONNECTION') {
         this.$emit('submit', {
-          type:this.selectedType,
-          target:JSON.stringify(this.selected.nodes)
+          type: this.selectedType,
+          target: JSON.stringify(this.selected.nodes)
         })
       }
       this.selected = undefined;
       this.selectedType = '';
     },
-    calculateSelectedAnchor(){
+    calculateSelectedAnchor() {
       let board = this.$refs.board.getBoundingClientRect();
       let origWidth = 100;
       let origHeight = 100;
       this.selectedAnchor = {
-        x:0,
-        y:0
+        x: 0,
+        y: 0
       }
-      if(this.selectedType === 'NODE'){
+      if (this.selectedType === 'NODE') {
         this.selectedAnchor = {
           x: this.selected.x + 2,
           y: this.selected.y + 2
         }
       }
-      if(this.selectedType === 'CONNECTION'){
+      if (this.selectedType === 'CONNECTION') {
         let a = this.nodes.find(node => node.label === this.selected.nodes[0]);
         let b = this.nodes.find(node => node.label === this.selected.nodes[1]);
         this.selectedAnchor = {
-          x: (Math.abs(a.x - b.x) / 2) + Math.min(a.x,b.x) + 1,
-          y: (Math.abs(a.y - b.y) / 2) + Math.min(a.y,b.y) + 1
+          x: (Math.abs(a.x - b.x) / 2) + Math.min(a.x, b.x) + 1,
+          y: (Math.abs(a.y - b.y) / 2) + Math.min(a.y, b.y) + 1
         }
       }
       this.selectedAnchor = {
-        x:board.x + board.width * (this.selectedAnchor.x / origWidth),
-        y:board.y + board.height * (this.selectedAnchor.y / origHeight)
+        x: board.x + board.width * (this.selectedAnchor.x / origWidth),
+        y: board.y + board.height * (this.selectedAnchor.y / origHeight)
       }
     }
   },
-  watch:{
-    selected(){
+  watch: {
+    selected() {
       this.calculateSelectedAnchor();
-      this.$emit('selected:updated',this.selected);
+      this.$emit('selected:updated', this.selected);
     },
-    selectedType(){
-      this.$emit('selectedType:updated',this.selected);
+    selectedType() {
+      this.$emit('selectedType:updated', this.selected);
     }
   }
 }
@@ -143,8 +153,8 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
-  top:50%;
-  left:50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -152,7 +162,12 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width:100vw;
-  height:100vh;
+  width: 100vw;
+  height: 100vh;
+}
+
+.test-div {
+  width: 100px;
+  height: 100px;
 }
 </style>
