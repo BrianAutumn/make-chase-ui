@@ -1,29 +1,33 @@
 <template>
-  <div class="metadata pa-3">
-    <div class="divider section pb-2 centered" v-if="!board.victory">
-      {{ currentTurnName }}'s Turn
-    </div>
-    <div class="divider section pb-2 centered" v-else>
-      {{ board.roles.find(role => role.role === board.victory).user.displayName }} Won!
-    </div>
-    <div class="divider section py-2 centered action-section" v-if="!board.victory">
-      <p v-if="myTurn && !actionsSubmitted">
-        {{ currentAction }}
-      </p>
-      <v-progress-circular v-else indeterminate/>
-    </div>
-    <div class="divider section py-2 centered action-section">
-      <p>
-        Turn {{board.turn.count}}
-      </p>
-    </div>
-    <div class="pt-2 section">
+  <div :class="[{'indicator-grid-desktop':$vuetify.display.mdAndUp,'indicator-grid-mobile':$vuetify.display.smAndDown},'indicator-grid','elevation-3']">
+    <div class="player-names">
       <p>
         Runner: {{ runnerName }}
       </p>
       <p>
         Chaser: {{ chaserName }}
       </p>
+    </div>
+    <div class="turn-count">
+      <p>
+        Turn {{board.turn.count}}
+      </p>
+    </div>
+    <div class="current-turn">
+      <p v-if="!board.victory">
+        {{ currentTurnName }}'s Turn
+      </p>
+      <p v-else>
+        {{ board.roles.find(role => role.role === board.victory).user.displayName }} Won!
+      </p>
+    </div>
+    <div class="current-action">
+      <div v-if="!board.victory">
+        <p v-if="myTurn && !actionsSubmitted">
+          {{ currentAction }}
+        </p>
+        <v-progress-circular v-else indeterminate/>
+      </div>
     </div>
   </div>
 </template>
@@ -64,30 +68,89 @@ export default {
 
 <style scoped>
 .metadata {
-  width: fit-content;
-  min-width: 10rem;
+  width: min-content;
   background-color: floralwhite;
-  border-radius: 0 0 10px 0;
   z-index: 10;
   position: fixed;
 }
 
-.divider {
-  border-bottom: 1px solid darkslategrey;
+.player-names {
+  grid-area: player-names;
 }
 
-.section {
-  width: 100%;
+.turn-count {
+  grid-area: turn-count;
 }
 
-.action-section {
-  min-height: 40px;
+.current-turn {
+  grid-area: current-turn;
 }
 
-.centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.current-action {
+  grid-area: current-action;
+}
+
+.indicator-grid {
+  background-color: floralwhite;
+  z-index: 10;
+  display: grid;
+  position: absolute;
+  padding: 5px 10px;
+  justify-items: center;
   align-items: center;
+  text-align: center;
 }
+
+.indicator-grid-mobile {
+  width:100%;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+   "player-names player-names player-names"
+   "turn-count current-turn current-action"
+}
+
+.indicator-grid-desktop {
+  min-width: 20rem;
+  border-radius: 0 0 10px 0;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+   "player-names"
+   "turn-count"
+   "current-turn"
+   "current-action";
+}
+
+div.indicator-grid-desktop > div:nth-child(n+2){
+  border-top: black solid 1px;
+}
+div.indicator-grid-desktop > div:nth-child(n){
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+div.indicator-grid-mobile > div:nth-child(n+3){
+  border-left: black solid 1px;
+  width: 100%;
+  height: 90%;
+}
+div.indicator-grid-mobile > div:nth-child(1){
+  padding-bottom: 10px;
+}
+div.indicator-grid-mobile > div:nth-child(n){
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 </style>
