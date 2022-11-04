@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog">
     <template v-slot:activator>
-      <v-btn @click="activate">
+      <v-btn @click="activate" class="game-button">
         Create Game
       </v-btn>
     </template>
@@ -72,5 +72,9 @@ export default {
 
 .card {
   min-width: fit-content;
+}
+
+.game-button {
+  width: fit-content;
 }
 </style>

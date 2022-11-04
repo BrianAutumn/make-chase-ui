@@ -138,16 +138,15 @@ export default {
   position: fixed;
   height: 100%;
   width: 100%;
-
 }
 
 .background {
   position: absolute;
   z-index: -1;
-  background-color: #182525;
+  background-color: #6e6046;
   width:300vw;
   height:300vh;
-  background-image: radial-gradient(#313131 3%, transparent 11%), radial-gradient(#313131 3%, transparent 11%);
+  background-image: radial-gradient(#4b3f2b 3%, transparent 11%), radial-gradient(#4b3f2b 3%, transparent 11%);
   background-repeat: repeat;
   background-size: 0 0, 30px 30px;
   transform: translate(var(--transformX), var(--transformY));

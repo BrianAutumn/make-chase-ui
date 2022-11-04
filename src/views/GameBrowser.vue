@@ -1,12 +1,12 @@
 <template>
-  <div class="main-wrapper">
-    <div class="main-container">
-      <CreateGameDialog/>
+  <MainFrame>
+    <div class="browser-container">
+      <CreateGameDialog class="create-game"/>
       <v-sheet elevation="1" class="game-list">
         <GameCard class="ma-2" v-for="game of games" :key="game._id" :game="game"/>
       </v-sheet>
     </div>
-  </div>
+  </MainFrame>
 </template>
 
 <script>
@@ -17,10 +17,11 @@ import {
 import {mapActions} from "vuex";
 import GameCard from "@/components/GameCard";
 import CreateGameDialog from "@/components/CreateGameDialog";
+import MainFrame from "@/components/MainFrame";
 
 export default {
   name: "GameBrowser",
-  components: {CreateGameDialog, GameCard},
+  components: {MainFrame, CreateGameDialog, GameCard},
   apollo: {
     me: {
       query: QUERY_ME
@@ -59,23 +60,18 @@ export default {
 
 <style scoped>
 .game-list {
-  overflow-y: scroll;
-  margin-top: 10px;
-  padding: 10px;
-  max-height: 90vh;
-  max-width: 1000px;
-  min-width: 800px;
+  overflow-y: auto;
+  flex-basis: auto;
 }
 
-.main-container {
-  margin: auto;
-  padding-top: 10px;
-  width: fit-content;
+.create-game {
+  flex-basis: fit-content;
 }
 
-.main-wrapper {
-  background-color: #fffbe0;
-  width: 100vw;
-  height: 100vh;
+.browser-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap:10px;
 }
 </style>
