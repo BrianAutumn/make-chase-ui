@@ -1,30 +1,19 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        Hello!
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <GoogleLogin @login="login"/>
-      </v-col>
-    </v-row>
-    <v-row v-show="loginFail">
-      <v-col>
-        Login Failed!!!
-      </v-col>
-    </v-row>
-  </v-container>
+  <MainFrame>
+    <div class="login-content">
+      <GoogleLogin/>
+    </div>
+  </MainFrame>
 </template>
 
 <script>
-import GoogleLogin from "@/components/GoogleLogin";
 import {mapState} from "vuex";
+import MainFrame from "@/components/MainFrame";
+import GoogleLogin from "@/components/GoogleLogin";
 
 export default {
   name: "LoginPage",
-  components: {GoogleLogin},
+  components: {GoogleLogin, MainFrame},
   data() {
     return {
       loginFail: false
@@ -47,5 +36,11 @@ export default {
 </script>
 
 <style scoped>
-
+.login-content {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding-top:20px;
+  padding-bottom:20px;
+}
 </style>

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import User from '../assets/icons/user.svg'
+import User from '@/assets/icons/user.svg'
 
 export default {
   name: "UserProfile",

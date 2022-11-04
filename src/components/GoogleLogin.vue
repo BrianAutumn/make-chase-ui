@@ -1,5 +1,5 @@
 <template>
-  <div id="buttonDiv"/>
+  <div class="button" id="buttonDiv"/>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     // eslint-disable-next-line
     google.accounts.id.renderButton(
         document.getElementById("buttonDiv"),
-        {theme: "outline", size: "large"}  // customization attributes
+        {size: "large"}  // customization attributes
     );
   },
   methods: {
@@ -31,5 +31,7 @@ export default {
 </script>
 
 <style scoped>
-
+ .button {
+   height: 50px;
+ }
 </style>
