@@ -51,24 +51,21 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      let board = panzoom(this.$refs.board, {
-        zoomDoubleClickSpeed: 1,
-        bounds: true
-      })
-      board.on('transform', (e) => {
-        this.calculateSelectedAnchor()
-        let transform = e.getTransform()
-        this.$emit('transform', transform)
-        console.log(transform)
-      })
-      let smallestDimension = Math.min(window.innerHeight,window.innerWidth);
-      let goalSize = smallestDimension * 7/8;
-      let scale = goalSize / 100;
-      board.zoomTo(0,0,scale)
-      board.moveTo(window.innerWidth/2 - goalSize/2,window.innerHeight/2 - goalSize/2)
-
-    }, 1000)
+    let board = panzoom(this.$refs.board, {
+      zoomDoubleClickSpeed: 1,
+      bounds: true
+    })
+    board.on('transform', (e) => {
+      this.calculateSelectedAnchor()
+      let transform = e.getTransform()
+      this.$emit('transform', transform)
+      console.log(transform)
+    })
+    let smallestDimension = Math.min(window.innerHeight,window.innerWidth);
+    let goalSize = smallestDimension * 7/8;
+    let scale = goalSize / 100;
+    board.zoomTo(0,0,scale)
+    board.moveTo(window.innerWidth/2 - goalSize/2,window.innerHeight/2 - goalSize/2)
   },
   methods: {
     selectNode(node) {
