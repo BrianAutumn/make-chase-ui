@@ -46,7 +46,10 @@ export const router = createRouter({
     {
       path: '/game/:gameId',
       name: 'GameManager',
-      component: GameManager
+      component: GameManager,
+      meta: {
+        auth: true
+      }
     }
   ]
 })

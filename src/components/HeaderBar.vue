@@ -3,7 +3,7 @@
     <MakeChaseLogo class="logo"/>
     <span class="logo-text">Make Chase</span>
     <div class="spacer"/>
-    <UserProfile/>
+    <UserProfile />
   </div>
 </template>
 

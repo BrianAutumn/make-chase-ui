@@ -1,7 +1,8 @@
 <template>
   <MainFrame>
     <div class="login-content">
-      <GoogleLogin/>
+      <GoogleLogin v-if="!loginFail" @login="login"/>
+      <p class="login-error" v-else>Sorry! Could not log you in!</p>
     </div>
   </MainFrame>
 </template>
@@ -22,7 +23,6 @@ export default {
   methods: {
     login(result) {
       if (result) {
-        console.log((this.loginDestination && {...this.loginDestination}) || {name: 'DefaultPageAuth'})
         this.$router.push((this.loginDestination && {...this.loginDestination}) || {name: 'DefaultPageAuth'})
       } else {
         this.loginFail = true;

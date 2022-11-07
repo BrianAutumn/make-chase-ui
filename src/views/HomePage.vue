@@ -1,22 +1,12 @@
 <template>
   <MainFrame>
-    <v-container class="home-content">
-      <v-row>
-        <v-col>
-          <router-link :to="{name:'GameBrowser'}">Games</router-link>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <router-link :to="{name:'Privacy'}">Privacy Notice</router-link>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <router-link :to="{name:'Terms'}">Terms of Service Notice</router-link>
-        </v-col>
-      </v-row>
-    </v-container>
+    <div class="home-container">
+      <v-btn @click="gamesButton">
+        Games
+      </v-btn>
+      <router-link :to="{name:'Privacy'}">Privacy Notice</router-link>
+      <router-link :to="{name:'Terms'}">Terms of Service Notice</router-link>
+    </div>
   </MainFrame>
 </template>
 
@@ -24,15 +14,21 @@
 import MainFrame from "@/components/MainFrame";
 export default {
   name: "HomePage",
-  components: {MainFrame}
+  components: {MainFrame},
+  methods:{
+    gamesButton(){
+      this.$router.push({name:'GameBrowser'})
+    }
+  }
 }
 </script>
 
 <style scoped>
-.home-content {
+.home-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  gap:10px;
+  padding:3px;
 }
 </style>

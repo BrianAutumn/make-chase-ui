@@ -19,10 +19,10 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     async connectionParams() {
+      let authToken = (await apolloClient.query({query: QUERY_SESSION})).data.session
+      store.commit('setLoggedIn',true)
       return {
-        authToken: (await apolloClient.query({
-          query: QUERY_SESSION
-        })).data.session
+        authToken
       }
     }
   },
@@ -33,7 +33,8 @@ export const subscriptionClient = wsLink.subscriptionClient;
 const errorLink = onError(({response}) => {
   if (response?.errors)
     response.errors = response.errors.filter(({extensions}) => {
-      if (extensions?.code === 'UNAUTHENTICATED') {
+      if (extensions?.code === 'UNAUTHENTICATED' && router.currentRoute.value.meta.auth) {
+        store.commit('setLoggedIn',false)
         store.commit('loginDestination', {path: window.location.pathname})
         router.push({name: 'LoginPage'});
         return false;

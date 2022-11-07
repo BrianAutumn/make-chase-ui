@@ -10,11 +10,15 @@ import {
 
 export const store = createStore({
   state: {
-    loginDestination: null
+    loginDestination: null,
+    loggedIn:false
   },
   mutations: {
     loginDestination(state, destination) {
       state.loginDestination = destination;
+    },
+    setLoggedIn(state, loggedIn){
+      state.loggedIn = loggedIn;
     }
   },
   actions: {

@@ -1,18 +1,18 @@
 <template>
   <div class="user-icon elevation-3">
-    <div class="user-text">
-      BT
-    </div>
-    <User class="user-background"/>
+    <UserIcon v-if="loggedIn" />
   </div>
 </template>
 
 <script>
-import User from '@/assets/icons/user.svg'
-
+import {mapState} from "vuex";
+import UserIcon from "@/components/UserIcon";
 export default {
   name: "UserProfile",
-  components:{User}
+  components:{UserIcon},
+  computed:{
+    ...mapState(['loggedIn'])
+  }
 }
 </script>
 
@@ -28,18 +28,5 @@ export default {
   overflow: hidden;
   fill:darkslategrey;
   cursor: default;
-}
-
-.user-background {
-  width: 150px;
-  height: 150px;
-}
-
-.user-text {
-  color:#e31313;
-  position: absolute;
-  font-family: 'Rock Salt', cursive;
-  font-size: 25px;
-  font-weight: bold;
 }
 </style>
